@@ -28,7 +28,7 @@ public class GetSongs {
         this.context = context;
 
         songList = new ArrayList<>();
-        Uri externalContentUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri externalContentUri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
         resolver = context.getContentResolver();
 
         final String[] projection = {
@@ -67,7 +67,7 @@ public class GetSongs {
 
     public Uri getAlbumArtUri(long albumId) {
 
-        Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
+        Uri sArtworkUri = Uri.parse("content://media/internal/audio/albumart");
         Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
 
         return albumArtUri;
