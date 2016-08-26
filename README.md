@@ -1,5 +1,6 @@
-###Joy Player
+##Joy Player
 
-##Contributors
+###Contributors
 Shivam Satija
+
 Ashish Kumar
