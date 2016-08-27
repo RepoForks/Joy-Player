@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.widget.Toast;
 
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
@@ -19,30 +20,14 @@ import java.util.List;
 
 public class Collector {
 
-    Context context;
-    static Collector collector;
-    static ContentResolver resolver;
+    private static ContentResolver resolver;
 
-    public static Collector with(Context context) {
-        collector = collector.Builder(context);
-        return collector;
-    }
-
-    public Collector Builder(Context context) {
-        collector.context = context;
-        return collector;
-    }
-
-    public List<Songs> getSongs(String source) {
-
-        Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
-        if(source == "internal") {
-            uri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
-        }
+    public static List<Songs> getSongs(Context context) {
 
         List<Songs> songsList = new ArrayList<>();
 
+        Uri externalContextUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
+        Uri internalContextUri = MediaStore.Audio.Media.INTERNAL_CONTENT_URI;
 
         resolver = context.getContentResolver();
 
@@ -56,54 +41,80 @@ public class Collector {
 
         final String where = MediaStore.Audio.Media.IS_MUSIC + "=1";
 
-        Cursor cursor = resolver.query(uri, projection, where, null, null);
-        cursor.moveToFirst();
+        Cursor externalContentCursor = resolver.query(externalContextUri, projection, where, null, null);
+        Cursor internalContentCursor = resolver.query(internalContextUri, projection, where, null, null);
 
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
+        if (internalContentCursor != null) {
+            for (int i = 0; i < internalContentCursor.getCount(); i++) {
+                internalContentCursor.moveToPosition(i);
 
-            Songs songs = new Songs();
+                Songs songs = new Songs();
 
-            songs.setId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID)));
-            if (cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)) == null) {
-                songs.setName("unknown");
-            } else {
-                songs.setName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                songs.setId(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                if (internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)) == null) {
+                    songs.setName("unknown");
+                } else {
+                    songs.setName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                }
+                songs.setName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                songs.setAlbumId(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                int index = internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                if (index != -1) {
+                    songs.setAlbumName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+                }
+
+                songs.setSingerName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+
+                songsList.add(songs);
             }
-            songs.setName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
-            songs.setAlbumId(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
-            int index = cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
-            if (index == -1){
-                //Album name not exist
-            } else {
-                songs.setAlbumName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+        }
+
+        if (externalContentCursor != null) {
+            for (int i = 0; i < externalContentCursor.getCount(); i++) {
+                externalContentCursor.moveToPosition(i);
+
+                Songs songs = new Songs();
+
+                songs.setId(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID)));
+                if (externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)) == null) {
+                    songs.setName("unknown");
+                } else {
+                    songs.setName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                }
+                songs.setName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                songs.setAlbumId(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
+                int index = externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM);
+                if (index != -1) {
+                    songs.setAlbumName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
+                }
+
+                songs.setSingerName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+
+                songsList.add(songs);
             }
+        }
 
-            songs.setSingerName(cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-
-            songsList.add(songs);
+        if (externalContentCursor != null) {
+            externalContentCursor.close();
+        }
+        if (internalContentCursor != null) {
+            internalContentCursor.close();
         }
 
         return songsList;
     }
 
-    public Uri getAlbumArtUri(long albumId) {
-
+    public static Uri getAlbumArtUri(long albumId) {
         Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
-        Uri albumArtUri = ContentUris.withAppendedId(sArtworkUri, albumId);
-
-        return albumArtUri;
+        return ContentUris.withAppendedId(sArtworkUri, albumId);
     }
 
     public Uri getSongsUri(int songId) {
-
         Uri sArtworkUri = Uri.parse("content://media/external/audio/media");
-        Uri songUri = ContentUris.withAppendedId(sArtworkUri, songId);
-
-        return songUri;
+        return ContentUris.withAppendedId(sArtworkUri, songId);
     }
 
-    public Bitmap getAlbumArtBitmap(long albumId) {
+    public static Bitmap getAlbumArtBitmap(Context context, long albumId) {
         Bitmap bitmap = null;
 
         Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
