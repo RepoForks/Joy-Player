@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -64,7 +62,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            Log.d("Name", mSongsList.get(getAdapterPosition()).getName());
+            Log.d("TAG", mSongsList.get(getPosition()).getDuration());
         }
     }
 }

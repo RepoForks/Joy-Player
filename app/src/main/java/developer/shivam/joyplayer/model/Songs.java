@@ -7,6 +7,7 @@ public class Songs {
     private String albumId = "";
     private String albumName = "";
     private String singerName = "";
+    private String duration = "";
 
     public String getId() {
         return id;
@@ -46,5 +47,13 @@ public class Songs {
 
     public void setSingerName(String singerName) {
         this.singerName = singerName;
+    }
+
+    public String getDuration() {
+        return duration;
+    }
+
+    public void setDuration(String duration) {
+        this.duration = duration;
     }
 }

@@ -64,8 +64,11 @@ public class Collector {
                 }
 
                 songs.setSingerName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
+                songs.setDuration(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
-                songsList.add(songs);
+                if (Integer.parseInt(songs.getDuration()) > 2500) {
+                    songsList.add(songs);
+                }
             }
         }
 
@@ -87,10 +90,11 @@ public class Collector {
                 if (index != -1) {
                     songs.setAlbumName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 }
-
                 songs.setSingerName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
-
-                songsList.add(songs);
+                songs.setDuration(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
+                if (Integer.parseInt(songs.getDuration()) > 2500) {
+                    songsList.add(songs);
+                }
             }
         }
 
