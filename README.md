@@ -2,5 +2,3 @@
 
 ###Contributors
 Shivam Satija
-
-Ashish Kumar
