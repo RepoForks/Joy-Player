@@ -1,10 +1,7 @@
-package developer.shivam.joyplayer;
+package developer.shivam.joyplayer.activity;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,11 +12,12 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.adapter.SongsAdapter;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.PermissionManager;
-import developer.shivam.joyplayer.util.onPermissionListener;
+import developer.shivam.joyplayer.listener.onPermissionListener;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView rvSongsList;
     private List<Songs> songsList = new ArrayList<>();
     private Context mContext = MainActivity.this;
-    private final int READ_EXTERNAL_CARD_REQUEST = 100;
     final String TAG = MainActivity.class.getSimpleName();
 
     @Override
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPermissionDenied() {
-
+                Toast.makeText(mContext, "Joy Player needs permission to get songs for you", Toast.LENGTH_LONG).show();
             }
 
         }).getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);

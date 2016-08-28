@@ -5,6 +5,8 @@ import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 
+import developer.shivam.joyplayer.listener.onPermissionListener;
+
 public class Permission extends Activity {
 
     private Permission mPermission = null;
