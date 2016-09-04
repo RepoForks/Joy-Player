@@ -66,7 +66,7 @@ public class Collector {
                 songs.setSingerName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
                 songs.setDuration(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
-                if (Integer.parseInt(songs.getDuration()) > 2500) {
+                if (Integer.parseInt(songs.getDuration()) > 2500 && !songs.getSingerName().toLowerCase().contains("samsung")) {
                     songsList.add(songs);
                 }
             }
@@ -92,7 +92,7 @@ public class Collector {
                 }
                 songs.setSingerName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
                 songs.setDuration(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
-                if (Integer.parseInt(songs.getDuration()) > 2500) {
+                if (Integer.parseInt(songs.getDuration()) > 2500 && !songs.getSingerName().toLowerCase().contains("samsung")) {
                     songsList.add(songs);
                 }
             }
