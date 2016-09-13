@@ -1,6 +1,7 @@
 package developer.shivam.joyplayer.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import java.util.List;
 
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.service.MusicPlayerService;
 import developer.shivam.joyplayer.util.Collector;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
@@ -63,6 +65,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             Log.d("TAG", mSongsList.get(getPosition()).getDuration());
+            Intent startMusic = new Intent(mContext, MusicPlayerService.class);
+            startMusic.putExtra("song", Collector.get)
+            mContext.startService(startMusic);
         }
     }
 }

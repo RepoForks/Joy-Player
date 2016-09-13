@@ -13,6 +13,7 @@ public class Permission extends Activity {
     private Activity mActivity;
     private final int READ_EXTERNAL_CARD_REQUEST = 100;
     private onPermissionListener mPermissionListener;
+    private int[] permissions;
 
     Permission(Activity activity) {
         mActivity = activity;
@@ -32,6 +33,10 @@ public class Permission extends Activity {
         } else {
             mPermissionListener.onPermissionGranted();
         }
+    }
+
+    public void getPermissions() {
+
     }
 
     @Override
