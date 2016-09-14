@@ -61,19 +61,14 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
     private final String TAG = MainActivity.this.getClass().getSimpleName();
     private List<Songs> songsList = new ArrayList<>();
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
-        bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
-    }
-
     private ServiceConnection mConnection = new ServiceConnection() {
 
         @Override
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
-            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            /**
+             * We now bind client (activity) with service
+             */
             PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) service;
             mPlayerService = binder.getService();
             mBound = true;
@@ -84,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             mBound = false;
         }
     };
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
+        bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -170,9 +172,9 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
     @Override
     protected void onStop() {
         super.onStop();
-        if (mBound) {
+        /*if (mBound) {
             unbindService(mConnection);
-        }
+        }*/
     }
 
     /**

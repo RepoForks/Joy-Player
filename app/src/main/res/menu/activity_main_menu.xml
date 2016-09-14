@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:title="Home" />
-    <item android:title="Library" />
-    <group>
-        <item android:title="Tracks" />
-    </group>
+    <item android:title="Now Playing" />
+    <item android:title="Tracks" />
 </menu>

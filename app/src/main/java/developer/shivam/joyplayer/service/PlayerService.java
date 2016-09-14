@@ -40,6 +40,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private String playerState = "";
 
     /**
+     * playerPosition is used to get the position
+     *  of current playing song
+     */
+    private int playerPosition = 0;
+
+    /**
      * In a bound service binder is used to bind service
      *  with clients
      */
@@ -99,6 +105,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     }
 
     public void playSong() {
+        mPlayer.start();
         mPlayer.reset();
         playerState = State.PLAY;
         try {
@@ -120,6 +127,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         } else if (playerState.equals(State.PAUSE)) {
             mPlayer.start();
         }
+    }
+
+    public int getPlayerPosition() {
+        playerPosition = mPlayer.getCurrentPosition();
+        return playerPosition;
     }
 
     public Uri getSongUri() {
