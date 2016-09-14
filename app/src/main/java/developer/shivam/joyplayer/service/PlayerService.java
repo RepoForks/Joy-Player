@@ -19,7 +19,10 @@ import android.os.PowerManager;
 import android.util.Log;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.util.State;
 
 /**
@@ -38,6 +41,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private MediaPlayer mPlayer = null;
     private Uri songUri;
     private String playerState = "";
+    public List<Songs> songsList = new ArrayList<>();
 
     /**
      * playerPosition is used to get the position
@@ -50,6 +54,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  with clients
      */
     private IBinder mBinder = new PlayerBinder();
+
+    /**
+     * position is used to keep track on
+     *  song at which position is playing
+     */
+    private int position;
 
     public class PlayerBinder extends Binder {
         public PlayerService getService() {
@@ -129,13 +139,33 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         }
     }
 
+    public void setPlayerPosition(int playerPosition) {
+        this.playerPosition = playerPosition;
+    }
+
     public int getPlayerPosition() {
         playerPosition = mPlayer.getCurrentPosition();
         return playerPosition;
     }
 
-    public Uri getSongUri() {
+    public List<Songs> getSongsList() {
+        return songsList;
+    }
+
+    public void setSongsList(List<Songs> songsList) {
+        this.songsList = songsList;
+    }
+
+    private Uri getSongUri() {
         return songUri;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public void setSongUri(Uri songUri) {

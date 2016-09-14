@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,6 +20,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -140,6 +142,16 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             }
         };
 
+        drawerNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.nowPlaying : Intent nowPlayingIntent = new Intent(mContext, NowPlaying.class);
+                        startActivity(nowPlayingIntent);
+                }
+                return false;
+            }
+        });
         mDrawerLayout.setDrawerListener(drawerToggle);
         mDrawerLayout.post(new Runnable() {
 
@@ -184,7 +196,9 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
     @Override
     public void onClick(int position) {
         System.out.println(songsList.get(position).getSongUri());
+        mPlayerService.setPosition(position);
         mPlayerService.setSongUri(songsList.get(position).getSongUri());
+        mPlayerService.setSongsList(songsList);
         mPlayerService.playSong();
     }
 }
