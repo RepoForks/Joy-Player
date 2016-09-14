@@ -20,6 +20,8 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activity.NowPlaying" />
+
         <service android:name=".service.PlayerService" />
     </application>
 

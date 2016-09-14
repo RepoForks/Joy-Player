@@ -31,13 +31,20 @@ public class NowPlaying extends AppCompatActivity {
     SeekBar seekBar;
 
     private PlayerService playerService;
-    private boolean mBound = false;
+    boolean mBound = false;
     private Context mContext = NowPlaying.this;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
+        bindService(playerServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    }
 
     private ServiceConnection mServiceConnection = new ServiceConnection() {
 
         /**
-         * Bounding NowPlaying activity with PlayerService
+         * Binding NowPlaying activity with PlayerService
          */
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
@@ -51,13 +58,6 @@ public class NowPlaying extends AppCompatActivity {
             mBound = false;
         }
     };
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
-        bindService(playerServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
