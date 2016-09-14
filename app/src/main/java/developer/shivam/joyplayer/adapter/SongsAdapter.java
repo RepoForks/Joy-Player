@@ -16,14 +16,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import developer.shivam.joyplayer.R;
+import developer.shivam.joyplayer.activity.MainActivity;
+import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.model.Songs;
-import developer.shivam.joyplayer.service.MusicPlayerService;
+import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
 
     Context mContext;
     List<Songs> mSongsList = new ArrayList<>();
+    MainActivity activity = null;
+    OnClickListener listener;
 
     public SongsAdapter(Context context, List<Songs> songsList) {
         mContext = context;
@@ -48,6 +52,10 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         return mSongsList.size();
     }
 
+    public void setOnClickListener(OnClickListener listener) {
+        this.listener = listener;
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvSongName;
@@ -64,10 +72,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            Log.d("TAG", mSongsList.get(getPosition()).getDuration());
-            Intent startMusic = new Intent(mContext, MusicPlayerService.class);
-            startMusic.putExtra("song", Collector.get)
-            mContext.startService(startMusic);
+            listener.onClick(getPosition());
         }
     }
 }

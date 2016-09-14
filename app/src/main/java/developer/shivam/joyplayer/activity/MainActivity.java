@@ -2,8 +2,13 @@ package developer.shivam.joyplayer.activity;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
+import android.os.Build;
+import android.os.IBinder;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -24,21 +29,61 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.adapter.SongsAdapter;
+import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.PermissionManager;
 import developer.shivam.joyplayer.listener.onPermissionListener;
 import developer.shivam.joyplayer.util.Sorter;
 
-public class MainActivity extends AppCompatActivity implements onPermissionListener {
+public class MainActivity extends AppCompatActivity implements onPermissionListener, OnClickListener {
 
     private Toolbar toolbar;
 
     @BindView(R.id.rvSongsList)
     RecyclerView rvSongsList;
 
+    /**
+     * mBound boolean is used to maintain
+     *  binding/unbinding of PlayerService
+     */
+    private boolean mBound = false;
+
+    /**
+     * PlayerService object helps to bind the
+     *  client with the service which act like
+     *  a server
+     */
+    private PlayerService mPlayerService;
+
     private Context mContext = MainActivity.this;
     private final String TAG = MainActivity.this.getClass().getSimpleName();
+    private List<Songs> songsList = new ArrayList<>();
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
+        bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) service;
+            mPlayerService = binder.getService();
+            mBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            mBound = false;
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +96,22 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
 
-        PermissionManager.with(this)
-                .setPermissionListener(this)
-                .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            PermissionManager.with(this)
+                    .setPermissionListener(this)
+                    .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+        } else {
+            songsList = Collector.getSongs(mContext);
+            LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
+            rvSongsList.setLayoutManager(layoutManager);
+            if (songsList.size() == 0) {
+                Toast.makeText(mContext, "No media files", Toast.LENGTH_SHORT).show();
+            } else {
+                SongsAdapter adapter = new SongsAdapter(mContext, songsList);
+                adapter.setOnClickListener(this);
+                rvSongsList.setAdapter(adapter);
+            }
+        }
     }
 
     private void mapping() {
@@ -92,18 +150,39 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
 
     @Override
     public void onPermissionGranted() {
-        List<Songs> songsList = Collector.getSongs(mContext);
+        songsList = Collector.getSongs(mContext);
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         rvSongsList.setLayoutManager(layoutManager);
         if (songsList.size() == 0) {
             Toast.makeText(mContext, "No media files", Toast.LENGTH_SHORT).show();
         } else {
-            rvSongsList.setAdapter(new SongsAdapter(mContext, songsList));
+            SongsAdapter adapter = new SongsAdapter(mContext, songsList);
+            adapter.setOnClickListener(this);
+            rvSongsList.setAdapter(adapter);
         }
     }
 
     @Override
     public void onPermissionDenied() {
         Log.d(TAG, "Permission denied");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mBound) {
+            unbindService(mConnection);
+        }
+    }
+
+    /**
+     * A custom onClick() function is used to get adapter position
+     *  to play the clicked song
+     */
+    @Override
+    public void onClick(int position) {
+        System.out.println(songsList.get(position).getSongUri());
+        mPlayerService.setSongUri(songsList.get(position).getSongUri());
+        mPlayerService.playSong();
     }
 }

@@ -1,5 +1,7 @@
 package developer.shivam.joyplayer.model;
 
+import android.net.Uri;
+
 public class Songs {
 
     private String id = "";
@@ -8,6 +10,7 @@ public class Songs {
     private String albumName = "";
     private String singerName = "";
     private String duration = "";
+    private Uri songUri = null;
 
     public String getId() {
         return id;
@@ -23,6 +26,14 @@ public class Songs {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Uri getSongUri() {
+        return songUri;
+    }
+
+    public void setSongUri(Uri songUri) {
+        this.songUri = songUri;
     }
 
     public String getAlbumId() {

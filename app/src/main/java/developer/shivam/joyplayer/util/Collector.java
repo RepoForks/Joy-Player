@@ -63,6 +63,11 @@ public class Collector {
                     songs.setAlbumName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 }
 
+                songs.setSongUri(ContentUris.withAppendedId(
+                        internalContextUri,
+                        internalContentCursor.getInt(internalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID))));
+
+                System.out.println(songs.getSongUri());
                 songs.setSingerName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
                 songs.setDuration(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 
@@ -90,6 +95,11 @@ public class Collector {
                 if (index != -1) {
                     songs.setAlbumName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 }
+
+                songs.setSongUri(ContentUris.withAppendedId(
+                        externalContextUri,
+                        externalContentCursor.getInt(externalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID))));
+
                 songs.setSingerName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
                 songs.setDuration(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
                 if (Integer.parseInt(songs.getDuration()) > 2500 && !songs.getSingerName().toLowerCase().contains("samsung")) {
