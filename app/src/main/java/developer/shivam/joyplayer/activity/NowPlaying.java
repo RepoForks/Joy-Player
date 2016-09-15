@@ -7,12 +7,13 @@ import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.SeekBar;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,30 +32,30 @@ public class NowPlaying extends AppCompatActivity {
     SeekBar seekBar;
 
     private PlayerService playerService;
-    boolean mBound = false;
     private Context mContext = NowPlaying.this;
+    private boolean mBound = false;
+    List<Songs> songsList = new ArrayList<>();
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
-        bindService(playerServiceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
+    protected void onResume() {
+        super.onResume();
+
+        Intent playServiceIntent = new Intent(mContext, PlayerService.class);
+        bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
 
-    private ServiceConnection mServiceConnection = new ServiceConnection() {
-
-        /**
-         * Binding NowPlaying activity with PlayerService
-         */
+    public ServiceConnection mConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) service;
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+            PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) iBinder;
             playerService = binder.getService();
+            Log.d("NowPlaying", "Service bounded");
             mBound = true;
         }
 
         @Override
-        public void onServiceDisconnected(ComponentName name) {
+        public void onServiceDisconnected(ComponentName componentName) {
+            Log.d("NowPlaying", "Service unbounded");
             mBound = false;
         }
     };
@@ -66,31 +67,14 @@ public class NowPlaying extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        List<Songs> songsList = playerService.getSongsList();
-        if (songsList.size() == 0) {
-            songsList = Collector.getSongs(mContext);
-        } else {
-            seekBar.setMax(Integer.parseInt(songsList.get(playerService.getPosition()).getDuration()));
+
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mBound) {
+            unbindService(mConnection);
         }
-
-        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(songsList.get(playerService.getPosition()).getAlbumId()))).into(ivAlbumArt);
-
-        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                playerService.setPlayerPosition(progress);
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-
-            }
-        });
     }
 }

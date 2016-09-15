@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-<<<<<<< HEAD
-      <module fileurl="file://$PROJECT_DIR$/.idea/Joy-Player.iml" filepath="$PROJECT_DIR$/.idea/Joy-Player.iml" />
-=======
       <module fileurl="file://$PROJECT_DIR$/Joy-Player.iml" filepath="$PROJECT_DIR$/Joy-Player.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
->>>>>>> 9da4b3982a9dcc516a54d10e2b78044bdfd26381
     </modules>
   </component>
 </project>

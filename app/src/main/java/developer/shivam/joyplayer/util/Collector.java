@@ -67,7 +67,6 @@ public class Collector {
                         internalContextUri,
                         internalContentCursor.getInt(internalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID))));
 
-                System.out.println(songs.getSongUri());
                 songs.setSingerName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)));
                 songs.setDuration(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DURATION)));
 

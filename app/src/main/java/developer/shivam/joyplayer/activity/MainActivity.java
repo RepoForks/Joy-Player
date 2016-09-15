@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
     };
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onResume() {
+        super.onResume();
         Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
         bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
     }
@@ -182,8 +182,8 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
+    protected void onPause() {
+        super.onPause();
         /*if (mBound) {
             unbindService(mConnection);
         }*/
