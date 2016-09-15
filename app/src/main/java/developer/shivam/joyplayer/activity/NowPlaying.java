@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,6 +36,7 @@ public class NowPlaying extends AppCompatActivity {
     private Context mContext = NowPlaying.this;
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
+    Handler handler;
 
     @Override
     protected void onResume() {
@@ -49,7 +51,8 @@ public class NowPlaying extends AppCompatActivity {
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) iBinder;
             playerService = binder.getService();
-            Log.d("NowPlaying", "Service bounded");
+            updateView(playerService);
+            Log.d("NowPlaying", "Service bounded with " + songsList.size() + " songs");
             mBound = true;
         }
 
@@ -66,7 +69,23 @@ public class NowPlaying extends AppCompatActivity {
         setContentView(R.layout.activity_now_playing);
 
         ButterKnife.bind(this);
+    }
 
+    private void updateView(PlayerService service) {
+        this.playerService = service;
+        Songs track = playerService.getSongsList().get(playerService.getPosition());
+        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).into(ivAlbumArt);
+        seekBar.setMax(Integer.parseInt(track.getDuration()) / 1000);
+
+        handler = new Handler();
+
+        NowPlaying.this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                seekBar.setProgress(playerService.getPlayerPosition()/1000);
+                handler.postDelayed(this, 1000);
+            }
+        });
 
     }
 
