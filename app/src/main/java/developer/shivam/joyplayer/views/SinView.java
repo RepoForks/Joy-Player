@@ -48,13 +48,18 @@ public class SinView extends View {
          */
         deviceWidth = canvas.getWidth();
         center = canvas.getHeight()/2;
-        y = center;
+        /*y = center;
         top = canvas.getHeight()/2 - amplitude;
         bottom = canvas.getHeight()/2 + amplitude;
 
         while (x_coordinate < deviceWidth) {
             canvas.drawPoint(x_coordinate, getY(y), waveColor);
             x_coordinate += 1;
+        }*/
+
+        for (int i = 0; i < deviceWidth; i = i + 10)
+        {
+            canvas.drawLine (i, center + amplitude * (float)Math.sin(i/180.0*Math.PI), i + 10, center + amplitude * (float)Math.sin ((i + 10)/180.0*Math.PI), waveColor);
         }
     }
 
