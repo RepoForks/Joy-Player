@@ -75,15 +75,35 @@ public class NowPlaying extends AppCompatActivity {
         this.playerService = service;
         Songs track = playerService.getSongsList().get(playerService.getPosition());
         Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).into(ivAlbumArt);
-        seekBar.setMax(Integer.parseInt(track.getDuration()) / 1000);
+        seekBar.setMax(Integer.parseInt(track.getDuration()));
 
         handler = new Handler();
 
         NowPlaying.this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                seekBar.setProgress(playerService.getPlayerPosition()/1000);
+                seekBar.setProgress(playerService.getPlayerPosition());
                 handler.postDelayed(this, 1000);
+            }
+        });
+
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (playerService != null && fromUser) {
+                    playerService.setPlayerPosition(progress);
+                    seekBar.setProgress(playerService.getPlayerPosition());
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 

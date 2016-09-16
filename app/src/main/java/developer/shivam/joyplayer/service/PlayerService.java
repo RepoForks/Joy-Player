@@ -38,16 +38,14 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private static final String TAG = "PlayerService";
     private Context mContext = PlayerService.this;
 
+    /**
+     * mPlayer is a media player object used to perform
+     *  basic MediaPlayer functionality
+     */
     private MediaPlayer mPlayer = null;
     private Uri songUri;
     private String playerState = "";
-    public List<Songs> songsList = new ArrayList<>();
-
-    /**
-     * playerPosition is used to get the position
-     *  of current playing song
-     */
-    private int playerPosition = 0;
+    private List<Songs> songsList = new ArrayList<>();
 
     /**
      * In a bound service binder is used to bind service
@@ -106,6 +104,15 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void onCompletion(MediaPlayer mp) {
         Log.d(TAG, "Songs playing completed");
+        if (position < songsList.size() - 1) {
+            position += 1;
+            setSongUri(songsList.get(position).getSongUri());
+            playSong();
+        } else {
+            position = 0;
+            setSongUri(songsList.get(position).getSongUri());
+            playSong();
+        }
     }
 
     @Override
@@ -133,21 +140,25 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     public void playPause() {
         if (playerState.equals(State.PLAY)) {
+            playerState = State.PAUSE;
             mPlayer.pause();
         } else if (playerState.equals(State.PAUSE)) {
+            playerState = State.PLAY;
             mPlayer.start();
         }
     }
 
     public void setPlayerPosition(int playerPosition) {
-        this.playerPosition = playerPosition;
+        mPlayer.seekTo(playerPosition);
     }
 
     public int getPlayerPosition() {
-        playerPosition = mPlayer.getCurrentPosition();
-        return playerPosition;
+        return mPlayer.getCurrentPosition();
     }
 
+    /**
+     * Below are the songsList getter and setter
+     */
     public List<Songs> getSongsList() {
         return songsList;
     }
@@ -160,16 +171,16 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         return songUri;
     }
 
+    public void setSongUri(Uri songUri) {
+        this.songUri = songUri;
+    }
+
     public void setPosition(int position) {
         this.position = position;
     }
 
     public int getPosition() {
         return position;
-    }
-
-    public void setSongUri(Uri songUri) {
-        this.songUri = songUri;
     }
 
     /**

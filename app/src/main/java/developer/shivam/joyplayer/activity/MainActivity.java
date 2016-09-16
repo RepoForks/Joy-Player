@@ -10,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -29,6 +30,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.adapter.SongsAdapter;
 import developer.shivam.joyplayer.listener.OnClickListener;
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
 
     @BindView(R.id.rvSongsList)
     RecyclerView rvSongsList;
+
+    @BindView(R.id.fab)
+    FloatingActionButton floatingActionButton;
 
     /**
      * mBound boolean is used to maintain
@@ -106,16 +111,14 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
                     .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
         } else {
             songsList = Collector.getSongs(mContext);
-            LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
-            rvSongsList.setLayoutManager(layoutManager);
-            if (songsList.size() == 0) {
-                Toast.makeText(mContext, "No media files", Toast.LENGTH_SHORT).show();
-            } else {
-                SongsAdapter adapter = new SongsAdapter(mContext, songsList);
-                adapter.setOnClickListener(this);
-                rvSongsList.setAdapter(adapter);
-            }
+            setUpRecyclerView(songsList);
         }
+    }
+
+    @OnClick(R.id.fab)
+    public void openNowPlaying() {
+        Intent nowPlayingActivity = new Intent(this, NowPlaying.class);
+        startActivity(nowPlayingActivity);
     }
 
     private void mapping() {
@@ -142,16 +145,6 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             }
         };
 
-        drawerNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.nowPlaying : Intent nowPlayingIntent = new Intent(mContext, NowPlaying.class);
-                        startActivity(nowPlayingIntent);
-                }
-                return false;
-            }
-        });
         mDrawerLayout.setDrawerListener(drawerToggle);
         mDrawerLayout.post(new Runnable() {
 
@@ -162,18 +155,22 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
         });
     }
 
-    @Override
-    public void onPermissionGranted() {
-        songsList = Collector.getSongs(mContext);
+    public void setUpRecyclerView(List<Songs> list) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(MainActivity.this);
         rvSongsList.setLayoutManager(layoutManager);
-        if (songsList.size() == 0) {
+        if (list.size() == 0) {
             Toast.makeText(mContext, "No media files", Toast.LENGTH_SHORT).show();
         } else {
-            SongsAdapter adapter = new SongsAdapter(mContext, songsList);
+            SongsAdapter adapter = new SongsAdapter(mContext, list);
             adapter.setOnClickListener(this);
             rvSongsList.setAdapter(adapter);
         }
+    }
+
+    @Override
+    public void onPermissionGranted() {
+        songsList = Collector.getSongs(mContext);
+        setUpRecyclerView(songsList);
     }
 
     @Override

@@ -17,11 +17,37 @@
 
     <LinearLayout android:layout_height="0dp"
         android:layout_width="match_parent"
-        android:layout_weight="1">
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
 
         <SeekBar android:id="@+id/seekBar"
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"/>
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <Button android:id="@+id/btnPrevious"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Prev"/>
+
+            <Button android:id="@+id/btnPlayPause"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Play"/>
+
+            <Button android:id="@+id/btnNext"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Next"/>
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
