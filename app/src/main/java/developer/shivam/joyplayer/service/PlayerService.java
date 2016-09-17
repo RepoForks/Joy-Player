@@ -2,9 +2,9 @@ package developer.shivam.joyplayer.service;
 
 /**
  * This class is an implementation of a Bound Service
- *  which acts like a Server in a Client-Server architecture
- *  where the clients are the another Application components
- *  like Activities
+ * which acts like a Server in a Client-Server architecture
+ * where the clients are the another Application components
+ * like Activities
  */
 
 import android.app.Service;
@@ -35,8 +35,8 @@ import developer.shivam.joyplayer.util.State;
  *  indefinitely in the background
  */
 public class PlayerService extends Service implements MediaPlayer.OnPreparedListener,
-                                                                MediaPlayer.OnErrorListener,
-                                                                    MediaPlayer.OnCompletionListener {
+        MediaPlayer.OnErrorListener,
+        MediaPlayer.OnCompletionListener {
 
     private static final String TAG = "PlayerService";
     private Context mContext = PlayerService.this;
@@ -186,15 +186,26 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     public void playPrevious() {
         if (playerState.equals(State.PLAY)) {
-            setPlayerPosition(0);
-            if (getPosition() != 0) {
-                setPosition(getPosition() - 1);
-                setSongUri(songsList.get(position).getSongUri());
-                playSong();
+            /**
+             * If the current player position is greater than 1000 ms
+             *  then the current playing song will restart else the
+             *  previous song in the list will play
+             */
+            if (getPlayerPosition() > 1000) {
+                mPlayer.pause();
+                setPlayerPosition(0);
+                mPlayer.start();
             } else {
-                setPosition(songsList.size() - 1);
-                setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                setPlayerPosition(0);
+                if (getPosition() != 0) {
+                    setPosition(getPosition() - 1);
+                    setSongUri(songsList.get(position).getSongUri());
+                    playSong();
+                } else {
+                    setPosition(songsList.size() - 1);
+                    setSongUri(songsList.get(position).getSongUri());
+                    playSong();
+                }
             }
         } else if (playerState.equals(State.PAUSE)) {
             setPlayerPosition(0);

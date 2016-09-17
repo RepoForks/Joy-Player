@@ -72,7 +72,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            listener.onClick(getPosition());
+            listener.onClick(ivAlbumArt, getPosition());
         }
     }
 }

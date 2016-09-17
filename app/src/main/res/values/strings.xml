@@ -4,4 +4,5 @@
     <string name="close">Close</string>
     <string name="btn_next">Next</string>
     <string name="btn_cancel">Cancel</string>
+    <string name="same_album_art">SharedAlbumArt</string>
 </resources>

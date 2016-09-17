@@ -12,6 +12,8 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -191,11 +193,27 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
      *  to play the clicked song
      */
     @Override
-    public void onClick(int position) {
-        System.out.println(songsList.get(position).getSongUri());
+    public void onClick(View view, int position) {
+
+        /**
+         * By clicking the item the song for that position will be
+         *  played and now playing activity will be opened.
+         */
+
         mPlayerService.setPosition(position);
         mPlayerService.setSongUri(songsList.get(position).getSongUri());
         mPlayerService.setSongsList(songsList);
         mPlayerService.playSong();
+
+        Intent nowPlayingIntent = new Intent(this, NowPlaying.class);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    view,
+                    getResources().getString(R.string.same_album_art));
+            startActivity(nowPlayingIntent, optionsCompat.toBundle());
+        } else {
+            startActivity(nowPlayingIntent);
+        }
     }
 }

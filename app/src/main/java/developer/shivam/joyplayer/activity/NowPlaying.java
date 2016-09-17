@@ -32,6 +32,9 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @BindView(R.id.ivAlbumArt)
     ImageView ivAlbumArt;
 
+    @BindView(R.id.ivBackground)
+    ImageView ivBackground;
+
     @BindView(R.id.seekBar)
     SeekBar seekBar;
 
@@ -101,7 +104,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
                 @Override
                 public void run() {
                     seekBar.setProgress(mPlayerService.getPlayerPosition());
-                    handler.postDelayed(this, 1000);
+                    handler.postDelayed(this, 100);
                 }
             });
 
@@ -129,7 +132,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
     public void setCurrentSong() {
         Songs track = mPlayerService.getSongsList().get(mPlayerService.getPosition());
-        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).into(ivAlbumArt);
+        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
+        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivBackground);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
     }
 
