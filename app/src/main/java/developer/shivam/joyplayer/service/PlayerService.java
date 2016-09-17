@@ -106,10 +106,12 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         Log.d(TAG, "Songs playing completed");
         if (position < songsList.size() - 1) {
             position += 1;
+            setPlayerPosition(0);
             setSongUri(songsList.get(position).getSongUri());
             playSong();
         } else {
             position = 0;
+            setPlayerPosition(0);
             setSongUri(songsList.get(position).getSongUri());
             playSong();
         }
@@ -145,6 +147,64 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         } else if (playerState.equals(State.PAUSE)) {
             playerState = State.PLAY;
             mPlayer.start();
+        }
+    }
+
+    /**
+     * This method is used to play the previous song
+     *  if present in the list
+     */
+    public void playPrevious() {
+        if (playerState.equals(State.PLAY)) {
+            setPlayerPosition(0);
+            if (getPosition() != 0) {
+                setPosition(getPosition() - 1);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong();
+            } else {
+                setPosition(songsList.size() - 1);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong();
+            }
+        } else if (playerState.equals(State.PAUSE)) {
+            setPlayerPosition(0);
+            if (getPosition() != 0) {
+                setPosition(getPosition() - 1);
+                setSongUri(songsList.get(position).getSongUri());
+            } else {
+                setPosition(songsList.size() - 1);
+                setSongUri(songsList.get(position).getSongUri());
+            }
+        }
+    }
+
+    /**
+     * This method is used to play the next song
+     *  in the list but id the last song of the list is
+     *  playing then on clicking this button first song will
+     *  be played.
+     */
+    public void playNext() {
+        if (playerState.equals(State.PLAY)) {
+            setPlayerPosition(0);
+            if (getPosition() != (songsList.size() - 1)) {
+                setPosition(getPosition() + 1);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong();
+            } else {
+                setPosition(0);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong();
+            }
+        } else if (playerState.equals(State.PAUSE)) {
+            setPlayerPosition(0);
+            if (getPosition() != 0) {
+                setPosition(getPosition() - 1);
+                setSongUri(songsList.get(position).getSongUri());
+            } else {
+                setPosition(songsList.size() - 1);
+                setSongUri(songsList.get(position).getSongUri());
+            }
         }
     }
 
