@@ -4,6 +4,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -26,7 +27,7 @@ import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
 
-public class NowPlaying extends AppCompatActivity {
+public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
     @BindView(R.id.ivAlbumArt)
     ImageView ivAlbumArt;
@@ -63,6 +64,7 @@ public class NowPlaying extends AppCompatActivity {
             PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) iBinder;
             mBound = true;
             mPlayerService = binder.getService();
+            mPlayerService.isRunningInBackground = false;
             updateView(mPlayerService);
             Log.d("NowPlaying", "Service bounded with " + songsList.size() + " songs");
         }
@@ -89,8 +91,9 @@ public class NowPlaying extends AppCompatActivity {
          * If this client is connected to mPlayerService then
          *  only perform mediaPlayer operation
          */
-        if (mBound) {
+        if (mPlayerService != null) {
             setCurrentSong();
+            mPlayerService.mPlayer.setOnCompletionListener(this);
 
             handler = new Handler();
 
@@ -151,7 +154,13 @@ public class NowPlaying extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         if (mBound) {
+            mPlayerService.isRunningInBackground = true;
             unbindService(mConnection);
         }
+    }
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        playNextSong();
     }
 }

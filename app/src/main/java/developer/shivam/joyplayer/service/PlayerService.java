@@ -16,6 +16,9 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.telecom.Call;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.io.IOException;
@@ -42,10 +45,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      * mPlayer is a media player object used to perform
      *  basic MediaPlayer functionality
      */
-    private MediaPlayer mPlayer = null;
+    public MediaPlayer mPlayer = null;
     private Uri songUri;
     private String playerState = "";
     private List<Songs> songsList = new ArrayList<>();
+    public boolean isRunningInBackground = false;
 
     /**
      * In a bound service binder is used to bind service
@@ -58,6 +62,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  song at which position is playing
      */
     private int position;
+    private PhoneStateListener mPhoneStateListener;
 
     public class PlayerBinder extends Binder {
         public PlayerService getService() {
@@ -79,6 +84,29 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         mPlayer.setOnPreparedListener(this);
         mPlayer.setOnErrorListener(this);
         mPlayer.setOnCompletionListener(this);
+
+        /**
+         * Here we will register the PHONE_STATE_LISTENER
+         *  to pause/play songs according to the phone state
+         */
+        mPhoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                if (state == TelephonyManager.CALL_STATE_RINGING) {
+                    mPlayer.pause();
+                } else if (state == TelephonyManager.CALL_STATE_IDLE) {
+                    mPlayer.start();
+                } else if (state == TelephonyManager.CALL_STATE_OFFHOOK) {
+                    mPlayer.pause();
+                }
+                super.onCallStateChanged(state, incomingNumber);
+            }
+        };
+
+        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
     }
 
     private void initPlayer() {
@@ -103,17 +131,19 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        Log.d(TAG, "Songs playing completed");
-        if (position < songsList.size() - 1) {
-            position += 1;
-            setPlayerPosition(0);
-            setSongUri(songsList.get(position).getSongUri());
-            playSong();
-        } else {
-            position = 0;
-            setPlayerPosition(0);
-            setSongUri(songsList.get(position).getSongUri());
-            playSong();
+        if (isRunningInBackground) {
+            Log.d(TAG, "Songs playing completed");
+            if (position < songsList.size() - 1) {
+                position += 1;
+                setPlayerPosition(0);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong();
+            } else {
+                position = 0;
+                setPlayerPosition(0);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong();
+            }
         }
     }
 
@@ -253,5 +283,14 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         mPlayer.stop();
         mPlayer.release();
         return super.onUnbind(intent);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
+        if (mTelephonyManager != null) {
+            mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
     }
 }
