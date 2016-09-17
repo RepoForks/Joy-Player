@@ -10,6 +10,8 @@ package developer.shivam.joyplayer.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -20,12 +22,17 @@ import android.telecom.Call;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.WindowManager;
+import android.widget.ImageView;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.util.PermissionManager;
 import developer.shivam.joyplayer.util.State;
 
 /**
@@ -63,6 +70,18 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     private int position;
     private PhoneStateListener mPhoneStateListener;
+
+    /**
+     * Window manager is user to add view above all view
+     *  In this app the bubbleView is used for giving
+     *  shortcut options
+     */
+    private WindowManager mWindowManager;
+
+    /**
+     * bubbleImageView is the view which will be added to the view
+     */
+    private ImageView bubbleImageView;
 
     public class PlayerBinder extends Binder {
         public PlayerService getService() {
@@ -121,6 +140,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     @Override
     public IBinder onBind(Intent intent) {
+
+        showBubble();
+
         return mBinder;
     }
 
@@ -299,9 +321,35 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        hideBubble();
+
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+        }
+    }
+
+    public void showBubble() {
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        bubbleImageView = new ImageView(this);
+        bubbleImageView.setImageResource(R.drawable.default_album_art);
+
+        WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(100, 100,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSPARENT);
+
+        mLayoutParams.gravity = Gravity.TOP | Gravity.START;
+        mLayoutParams.x = 0;
+        mLayoutParams.y = 100;
+
+        mWindowManager.addView(bubbleImageView, mLayoutParams);
+    }
+
+    public void hideBubble() {
+        if (bubbleImageView != null) {
+            mWindowManager.removeView(bubbleImageView);
         }
     }
 }

@@ -1,19 +1,23 @@
 package developer.shivam.joyplayer.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Build;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
@@ -113,10 +117,23 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             PermissionManager.with(this)
                     .setPermissionListener(this)
                     .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
+
+            requestSystemAlertPermission(this, null, 100);
         } else {
             songsList = Collector.getSongs(mContext);
             setUpRecyclerView(songsList);
         }
+    }
+
+    public static void requestSystemAlertPermission(Activity context, Fragment fragment, int requestCode) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
+            return;
+        final String packageName = context == null ? fragment.getActivity().getPackageName() : context.getPackageName();
+        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + packageName));
+        if (fragment != null)
+            fragment.startActivityForResult(intent, requestCode);
+        else
+            context.startActivityForResult(intent, requestCode);
     }
 
     @OnClick(R.id.fab)
