@@ -106,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
         mapping();
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
+        rvSongsList.setHasFixedSize(true);
+        rvSongsList.setNestedScrollingEnabled(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PermissionManager.with(this)
@@ -207,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
 
         Intent nowPlayingIntent = new Intent(this, NowPlaying.class);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                     view,
                     getResources().getString(R.string.same_album_art));

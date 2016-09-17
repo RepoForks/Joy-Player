@@ -47,7 +47,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     public MediaPlayer mPlayer = null;
     private Uri songUri;
-    private String playerState = "";
+    private int playerState = 0;
     private List<Songs> songsList = new ArrayList<>();
     public boolean isRunningInBackground = false;
 
@@ -171,10 +171,10 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  on the basis of playerState
      */
     public void playPause() {
-        if (playerState.equals(State.PLAY)) {
+        if (playerState == State.PLAY) {
             playerState = State.PAUSE;
             mPlayer.pause();
-        } else if (playerState.equals(State.PAUSE)) {
+        } else if (playerState == State.PAUSE) {
             playerState = State.PLAY;
             mPlayer.start();
         }
@@ -185,7 +185,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  if present in the list
      */
     public void playPrevious() {
-        if (playerState.equals(State.PLAY)) {
+        if (playerState == State.PLAY) {
             /**
              * If the current player position is greater than 1000 ms
              *  then the current playing song will restart else the
@@ -207,7 +207,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
                     playSong();
                 }
             }
-        } else if (playerState.equals(State.PAUSE)) {
+        } else if (playerState == State.PAUSE) {
             setPlayerPosition(0);
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);
@@ -226,7 +226,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  be played.
      */
     public void playNext() {
-        if (playerState.equals(State.PLAY)) {
+        if (playerState == State.PLAY) {
             setPlayerPosition(0);
             if (getPosition() != (songsList.size() - 1)) {
                 setPosition(getPosition() + 1);
@@ -237,7 +237,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
                 setSongUri(songsList.get(position).getSongUri());
                 playSong();
             }
-        } else if (playerState.equals(State.PAUSE)) {
+        } else if (playerState == State.PAUSE) {
             setPlayerPosition(0);
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);

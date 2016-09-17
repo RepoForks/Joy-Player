@@ -1,7 +1,7 @@
 package developer.shivam.joyplayer.util;
 
 public class State {
-    public static String PAUSE = "PAUSE";
-    public static String PLAY = "PLAY";
-    public static String STOP = "STOP";
+    public static int PAUSE = 0;
+    public static int PLAY = 1;
+    public static int STOP = -1;
 }
