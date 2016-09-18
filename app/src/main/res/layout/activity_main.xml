@@ -17,6 +17,9 @@
             android:id="@+id/toolbar"
             layout="@layout/app_bar" />
 
+        <include android:id="@+id/recentlyAddedContainer"
+            layout="@layout/layout_recently_added" />
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvSongsList"
             android:layout_width="match_parent"

@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
+            Log.d("ServiceConnection", "Connection removed");
             mBound = false;
         }
     };
@@ -97,7 +98,9 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
     protected void onResume() {
         super.onResume();
         Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
-        bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        if (!mBound) {
+            bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Override

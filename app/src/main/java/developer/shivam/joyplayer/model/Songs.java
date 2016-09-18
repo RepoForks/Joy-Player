@@ -11,6 +11,15 @@ public class Songs {
     private String singerName = "";
     private String duration = "";
     private Uri songUri = null;
+    private int dateAdded = 0;
+
+    public int getDateAdded() {
+        return dateAdded;
+    }
+
+    public void setDateAdded(int dateAdded) {
+        this.dateAdded = dateAdded;
+    }
 
     public String getId() {
         return id;

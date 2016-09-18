@@ -17,4 +17,16 @@ public class Sorter {
         });
         return list;
     }
+
+    public static List<Songs> getTopRecentAdded(List<Songs> list) {
+        Collections.sort(list, new Comparator<Songs>() {
+            @Override
+            public int compare(Songs left, Songs right) {
+                return left.getDateAdded() - right.getDateAdded();
+            }
+        });
+
+        Collections.reverse(list);
+        return list;
+    }
 }

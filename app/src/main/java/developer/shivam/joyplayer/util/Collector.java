@@ -63,6 +63,10 @@ public class Collector {
                     songs.setAlbumName(internalContentCursor.getString(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 }
 
+                int dateAddedIndex = internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED);
+                if (dateAddedIndex != -1) {
+                    songs.setDateAdded(internalContentCursor.getInt(internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED)));
+                }
                 songs.setSongUri(ContentUris.withAppendedId(
                         internalContextUri,
                         internalContentCursor.getInt(internalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID))));
@@ -95,6 +99,10 @@ public class Collector {
                     songs.setAlbumName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)));
                 }
 
+                int dateAddedIndex = internalContentCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED);
+                if (dateAddedIndex != -1) {
+                    songs.setDateAdded(externalContentCursor.getInt(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED)));
+                }
                 songs.setSongUri(ContentUris.withAppendedId(
                         externalContextUri,
                         externalContentCursor.getInt(externalContentCursor.getColumnIndex(MediaStore.Audio.Media._ID))));
@@ -114,7 +122,7 @@ public class Collector {
             internalContentCursor.close();
         }
 
-        return Sorter.sort(songsList);
+        return Sorter.getTopRecentAdded(songsList);
     }
 
     /**
