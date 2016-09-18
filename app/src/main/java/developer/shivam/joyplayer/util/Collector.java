@@ -114,19 +114,22 @@ public class Collector {
             internalContentCursor.close();
         }
 
-        return songsList;
+        return Sorter.sort(songsList);
     }
 
+    /**
+     * This method gives the uri for fetching songs
+     *  album art for a particular album id
+     */
     public static Uri getAlbumArtUri(long albumId) {
         Uri sArtworkUri = Uri.parse("content://media/external/audio/albumart");
         return ContentUris.withAppendedId(sArtworkUri, albumId);
     }
 
-    public Uri getSongsUri(int songId) {
-        Uri sArtworkUri = Uri.parse("content://media/external/audio/media");
-        return ContentUris.withAppendedId(sArtworkUri, songId);
-    }
-
+    /**
+     * This method returns the song album in form of bitmap
+     *  for particular album id
+     */
     public static Bitmap getAlbumArtBitmap(Context context, long albumId) {
         Bitmap bitmap = null;
 

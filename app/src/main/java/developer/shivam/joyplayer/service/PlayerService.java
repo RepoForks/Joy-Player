@@ -128,6 +128,11 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         }
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_STICKY;
+    }
+
     private void initPlayer() {
         mPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -140,8 +145,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     @Override
     public IBinder onBind(Intent intent) {
-
-        showBubble();
 
         return mBinder;
     }
@@ -322,15 +325,13 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     public void onDestroy() {
         super.onDestroy();
 
-        hideBubble();
-
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
     }
 
-    public void showBubble() {
+    /*public void showBubble() {
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         bubbleImageView = new ImageView(this);
         bubbleImageView.setImageResource(R.drawable.default_album_art);
@@ -351,5 +352,5 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (bubbleImageView != null) {
             mWindowManager.removeView(bubbleImageView);
         }
-    }
+    }*/
 }
