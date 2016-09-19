@@ -33,19 +33,30 @@
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/colorPrimary"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context="developer.shivam.joyplayer.activity.MainActivity">
+
+            <TextView android:id="@+id/tvRecentlyAdded"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#DDFFFFFF"
+                android:text="Recently Added Tracks"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="8dp"/>
 
             <include
                 android:id="@+id/recentlyAddedContainer"
                 layout="@layout/layout_recently_added"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvRecentlyAdded"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvSongsList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@android:color/white"
                 android:layout_below="@id/recentlyAddedContainer" />
 
             <View

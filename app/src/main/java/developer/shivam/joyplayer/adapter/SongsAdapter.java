@@ -21,6 +21,8 @@ import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.Helper;
+import developer.shivam.joyplayer.util.HelperMethods;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
 
@@ -43,7 +45,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     @Override
     public void onBindViewHolder(SongsAdapter.ViewHolder holder, int position) {
         holder.tvSongName.setText(mSongsList.get(position).getName());
-        holder.tvSingerName.setText(mSongsList.get(position).getSingerName());
+        holder.tvSingerName.setText(mSongsList.get(position).getSingerName() + " · " + HelperMethods.getSongDuration(Integer.valueOf(mSongsList.get(position).getDuration())));
         Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(holder.ivAlbumArt);
     }
 

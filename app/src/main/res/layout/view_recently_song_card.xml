@@ -1,27 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView android:layout_width="wrap_content"
-    android:layout_height="130dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="130dp">
 
-    <LinearLayout android:layout_width="100dp"
+    <LinearLayout
+        android:layout_width="100dp"
         android:layout_height="130dp"
         android:orientation="vertical">
 
-        <ImageView android:id="@+id/ivAlbumArt"
+        <ImageView
+            android:id="@+id/ivAlbumArt"
             android:layout_width="match_parent"
             android:layout_height="100dp"
-            android:scaleType="centerCrop"/>
+            android:scaleType="centerCrop" />
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="30dp"
             android:layout_marginLeft="5dp">
 
-            <TextView android:id="@+id/tvSongName"
+            <TextView
+                android:id="@+id/tvSongName"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:maxLines="1"
-                android:textSize="13sp"/>
-        </LinearLayout>
+                android:layout_alignParentLeft="true"
+                android:layout_centerHorizontal="true"
+                android:layout_toLeftOf="@+id/ibTrackOptions"
+                android:singleLine="true"
+                android:textSize="13sp" />
+
+            <ImageButton
+                android:id="@+id/ibTrackOptions"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerHorizontal="true"
+                android:background="@android:color/transparent"
+                android:src="@drawable/vertical_menu_18dp" />
+        </RelativeLayout>
     </LinearLayout>
 </android.support.v7.widget.CardView>

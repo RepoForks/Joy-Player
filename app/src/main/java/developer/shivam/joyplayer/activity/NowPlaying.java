@@ -13,6 +13,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
+import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
@@ -26,6 +27,7 @@ import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.HelperMethods;
 
 public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
@@ -43,6 +45,12 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
     @BindView(R.id.btnNext)
     Button btnNext;
+
+    @BindView(R.id.tvCurrentDuration)
+    TextView tvCurrentDuration;
+
+    @BindView(R.id.tvTotalDuration)
+    TextView tvTotalDuration;
 
     private PlayerService mPlayerService;
     private Context mContext = NowPlaying.this;
@@ -101,6 +109,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
                 @Override
                 public void run() {
                     seekBar.setProgress(mPlayerService.getPlayerPosition());
+                    tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlayerService.getPlayerPosition()));
                     handler.postDelayed(this, 100);
                 }
             });
@@ -129,6 +138,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
     public void setCurrentSong() {
         Songs track = mPlayerService.getSongsList().get(mPlayerService.getPosition());
+        tvTotalDuration.setText(HelperMethods.getSongDuration(Integer.parseInt(track.getDuration())));
         Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
     }
