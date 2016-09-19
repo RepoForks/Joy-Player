@@ -76,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
      */
     private PlayerService mPlayerService;
 
+    private final int RECENT_TRACK_COUNT = 5;
     private Context mContext = MainActivity.this;
     private final String TAG = MainActivity.this.getClass().getSimpleName();
     private List<Songs> songsList = new ArrayList<>();
@@ -199,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
 
     public void loadHorizontalRecentlyAddedItems() {
         LinearLayout linearLayoutRecentlyAddedItem = (LinearLayout) findViewById(R.id.llHorizontalViewContainer);
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < RECENT_TRACK_COUNT; i++) {
             View view = LayoutInflater.from(mContext).inflate(R.layout.view_recently_song_card, null);
 
             View spacing = new View(mContext);
