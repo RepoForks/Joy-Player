@@ -122,7 +122,7 @@ public class Collector {
             internalContentCursor.close();
         }
 
-        return Sorter.getTopRecentAdded(songsList);
+        return Sorter.sort(songsList);
     }
 
     /**

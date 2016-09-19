@@ -27,9 +27,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -121,7 +127,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
                     .setPermissionListener(this)
                     .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
 
-            requestSystemAlertPermission(this, null, 100);
+            //requestSystemAlertPermission(this, null, 100);
         } else {
             songsList = Collector.getSongs(mContext);
             setUpRecyclerView(songsList);
@@ -188,7 +194,29 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             SongsAdapter adapter = new SongsAdapter(mContext, list);
             adapter.setOnClickListener(this);
             rvSongsList.setAdapter(adapter);
+
+            loadHorizontalRecentlyAddedItems();
         }
+    }
+
+    public void loadHorizontalRecentlyAddedItems() {
+        LinearLayout linearLayoutRecentlyAddedItem = (LinearLayout) findViewById(R.id.llHorizontalViewContainer);
+        for (int i = 0; i < 4; i++) {
+            View view = LayoutInflater.from(mContext).inflate(R.layout.view_recently_song_card, null);
+
+            View spacing = new View(mContext);
+            spacing.setLayoutParams(new LinearLayout.LayoutParams(32, LinearLayout.LayoutParams.MATCH_PARENT));
+
+            ((TextView) view.findViewById(R.id.tvSongName)).setText(songsList.get(i).getName());
+            Picasso.with(mContext).load(songsList.get(i).getSongUri()).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
+
+            linearLayoutRecentlyAddedItem.addView(spacing);
+            linearLayoutRecentlyAddedItem.addView(view);
+        }
+
+        View spacing = new View(mContext);
+        spacing.setLayoutParams(new LinearLayout.LayoutParams(32, LinearLayout.LayoutParams.MATCH_PARENT));
+        linearLayoutRecentlyAddedItem.addView(spacing);
     }
 
     @Override
