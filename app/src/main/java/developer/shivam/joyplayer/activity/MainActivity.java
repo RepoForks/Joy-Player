@@ -119,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
         mapping();
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
-        rvSongsList.setHasFixedSize(true);
-        rvSongsList.setNestedScrollingEnabled(false);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PermissionManager.with(this)
@@ -208,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             spacing.setLayoutParams(new LinearLayout.LayoutParams(32, LinearLayout.LayoutParams.MATCH_PARENT));
 
             ((TextView) view.findViewById(R.id.tvSongName)).setText(songsList.get(i).getName());
-            Picasso.with(mContext).load(songsList.get(i).getSongUri()).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
+            Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(songsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
 
             linearLayoutRecentlyAddedItem.addView(spacing);
             linearLayoutRecentlyAddedItem.addView(view);

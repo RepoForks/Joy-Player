@@ -1,32 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
-    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <!-- Main content of drawerLayout -->
+    <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background">
+        android:fitsSystemWindows="true">
 
-        <!-- Main content of drawerLayout -->
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:elevation="0dp">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:theme="@style/ThemeOverlay.AppCompat.Dark"
+                app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+        </android.support.design.widget.AppBarLayout>
+
         <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             tools:context="developer.shivam.joyplayer.activity.MainActivity">
-
-            <include
-                android:id="@+id/toolbar"
-                layout="@layout/app_bar" />
 
             <include
                 android:id="@+id/recentlyAddedContainer"
                 layout="@layout/layout_recently_added"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/toolbar" />
+                android:layout_height="wrap_content"/>
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvSongsList"
@@ -39,24 +53,23 @@
                 android:layout_height="5dp"
                 android:layout_below="@id/recentlyAddedContainer"
                 android:background="@drawable/toolbar_shadow" />
-
-            <android.support.design.widget.FloatingActionButton
-                android:id="@+id/fab"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_margin="@dimen/fab_margin"
-                android:src="@drawable/ic_play_arrow_black_24dp" />
         </RelativeLayout>
 
-        <!-- navigationView for drawerLayout -->
-        <android.support.design.widget.NavigationView
-            android:id="@+id/mainActivityNavigationView"
-            android:layout_width="280dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:menu="@menu/activity_main_menu" />
-    </android.support.v4.widget.DrawerLayout>
-</android.support.design.widget.CoordinatorLayout>
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="@dimen/fab_margin"
+            android:src="@drawable/ic_play_arrow_black_24dp" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <!-- navigationView for drawerLayout -->
+    <android.support.design.widget.NavigationView
+        android:id="@+id/mainActivityNavigationView"
+        android:layout_width="280dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        app:menu="@menu/activity_main_menu" />
+</android.support.v4.widget.DrawerLayout>
