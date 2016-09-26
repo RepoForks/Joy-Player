@@ -6,4 +6,5 @@
     <dimen name="bubble_size">4dp</dimen>
     <dimen name="wave_height">4dp</dimen>
     <dimen name="footer_height">4dp</dimen>
+    <dimen name="horizontal_card_margin">8dp</dimen>
 </resources>

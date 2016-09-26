@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
      */
     private PlayerService mPlayerService;
 
-    private final int RECENT_TRACK_COUNT = 5;
+    private final int RECENT_TRACK_COUNT = 1;
     private Context mContext = MainActivity.this;
     private final String TAG = MainActivity.this.getClass().getSimpleName();
     private List<Songs> songsList = new ArrayList<>();
@@ -204,7 +204,7 @@ public class MainActivity extends AppCompatActivity implements onPermissionListe
             View view = LayoutInflater.from(mContext).inflate(R.layout.view_recently_song_card, null);
 
             View spacing = new View(mContext);
-            spacing.setLayoutParams(new LinearLayout.LayoutParams(32, LinearLayout.LayoutParams.MATCH_PARENT));
+            spacing.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.horizontal_card_margin), LinearLayout.LayoutParams.MATCH_PARENT));
 
             ((TextView) view.findViewById(R.id.tvSongName)).setText(songsList.get(i).getName());
             Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(songsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));

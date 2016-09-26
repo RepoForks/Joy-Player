@@ -1,22 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="130dp">
+    android:layout_height="110dp">
 
     <LinearLayout
-        android:layout_width="100dp"
-        android:layout_height="130dp"
+        android:layout_width="85dp"
+        android:layout_height="110dp"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/ivAlbumArt"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="85dp"
             android:scaleType="centerCrop" />
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="25dp"
             android:layout_marginLeft="5dp">
 
             <TextView
@@ -27,6 +27,7 @@
                 android:layout_centerHorizontal="true"
                 android:layout_toLeftOf="@+id/ibTrackOptions"
                 android:singleLine="true"
+                android:gravity="center_vertical"
                 android:textSize="13sp" />
 
             <ImageButton

@@ -1,4 +1,1 @@
-##Joy Player
-
-###Contributors
-Shivam Satija
+##Joy Player - Open-Source Music Player
