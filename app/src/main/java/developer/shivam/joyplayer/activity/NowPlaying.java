@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -28,6 +30,7 @@ import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.HelperMethods;
+import developer.shivam.library.WaveView;
 
 public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
@@ -52,11 +55,18 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @BindView(R.id.tvTotalDuration)
     TextView tvTotalDuration;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
+    @BindView(R.id.waveView)
+    WaveView nowPlayView;
+
     private PlayerService mPlayerService;
     private Context mContext = NowPlaying.this;
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
     Handler handler;
+    boolean isPlaying = true;
 
     @Override
     protected void onResume() {
@@ -64,6 +74,12 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
         Intent playServiceIntent = new Intent(mContext, PlayerService.class);
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
+
+        if (isPlaying) {
+            nowPlayView.start();
+        } else {
+            nowPlayView.stop();
+        }
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -90,6 +106,11 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         setContentView(R.layout.activity_now_playing);
 
         ButterKnife.bind(this);
+        setSupportActionBar(toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setTitle("");
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
     }
 
     private void updateView(PlayerService service) {
@@ -145,7 +166,13 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
     @OnClick(R.id.btnPlayPause)
     public void playPause() {
+        isPlaying = !isPlaying;
         mPlayerService.playPause();
+        if (isPlaying) {
+            nowPlayView.start();
+        } else {
+            nowPlayView.stop();
+        }
     }
 
     @OnClick(R.id.btnPrevious)
@@ -172,5 +199,14 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @Override
     public void onCompletion(MediaPlayer mp) {
         playNextSong();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home : onBackPressed();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
