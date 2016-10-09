@@ -8,7 +8,6 @@ import android.content.ServiceConnection;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,7 +26,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import developer.shivam.joyplayer.R;
-import developer.shivam.joyplayer.activity.MainActivity;
 import developer.shivam.joyplayer.activity.NowPlaying;
 import developer.shivam.joyplayer.adapter.SongsAdapter;
 import developer.shivam.joyplayer.listener.OnClickListener;
@@ -35,7 +33,6 @@ import developer.shivam.joyplayer.listener.onPermissionListener;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
-import developer.shivam.joyplayer.util.Permission;
 import developer.shivam.joyplayer.util.PermissionManager;
 
 public class TracksFragment extends Fragment implements onPermissionListener, OnClickListener {

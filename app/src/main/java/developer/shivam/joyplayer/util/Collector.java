@@ -8,15 +8,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.provider.MediaStore;
-import android.widget.Toast;
-
-import developer.shivam.joyplayer.R;
-import developer.shivam.joyplayer.model.Songs;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import developer.shivam.joyplayer.R;
+import developer.shivam.joyplayer.model.Songs;
 
 public class Collector {
 

@@ -4,11 +4,15 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,7 +23,10 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -61,6 +68,12 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @BindView(R.id.waveView)
     WaveView nowPlayView;
 
+    @BindView(R.id.tvSongName)
+    TextView tvSongName;
+
+    @BindView(R.id.tvSongArtist)
+    TextView tvSongArtist;
+
     private PlayerService mPlayerService;
     private Context mContext = NowPlaying.this;
     private boolean mBound = false;
@@ -75,6 +88,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         Intent playServiceIntent = new Intent(mContext, PlayerService.class);
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
+        nowPlayView.setAmplitude(1);
         if (isPlaying) {
             nowPlayView.start();
         } else {
@@ -160,8 +174,62 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     public void setCurrentSong() {
         Songs track = mPlayerService.getSongsList().get(mPlayerService.getPosition());
         tvTotalDuration.setText(HelperMethods.getSongDuration(Integer.parseInt(track.getDuration())));
-        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()))).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
+        Uri albumArtUri = Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()));
+        Picasso.with(mContext).load(albumArtUri).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
+        ivAlbumArt.setAlpha(200);
+        tvSongName.setText(track.getName());
+        tvSongArtist.setText(track.getSingerName());
+        setCurrentAlbumArt(albumArtUri);
+    }
+
+    private void setCurrentAlbumArt(Uri albumArtUri) {
+        try {
+            InputStream inputStream = getContentResolver().openInputStream(albumArtUri);
+            Bitmap albumBitmap = BitmapFactory.decodeStream(inputStream);
+
+            Palette.from(albumBitmap).generate(new Palette.PaletteAsyncListener() {
+                @Override
+                public void onGenerated(Palette palette) {
+                    if (palette.getVibrantSwatch() != null) {
+                        int value = 0x000000;
+                        String color = "#" + String.valueOf(Integer.toHexString(palette.getVibrantColor(value)));
+                        Log.d("Vibrant", color);
+                        nowPlayView.setColor(color);
+                    }
+
+                    if (palette.getDarkVibrantSwatch() != null) {
+                        int value = 0x000000;
+                        String color = "#" + String.valueOf(Integer.toHexString(palette.getDarkVibrantColor(value)));
+                        Log.d("Vibrant", color);
+                        nowPlayView.setColorOne(color);
+                    }
+                }
+            });
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
+
+    HashMap<String, Palette.Swatch> processPalette(Palette p) {
+        HashMap<String, Palette.Swatch> map = new HashMap<>();
+
+        if (p.getVibrantSwatch() != null)
+            map.put("Vibrant", p.getVibrantSwatch());
+        if (p.getDarkVibrantSwatch() != null)
+            map.put("DarkVibrant", p.getDarkVibrantSwatch());
+        if (p.getLightVibrantSwatch() != null)
+            map.put("LightVibrant", p.getLightVibrantSwatch());
+
+        if (p.getMutedSwatch() != null)
+            map.put("Muted", p.getMutedSwatch());
+        if (p.getDarkMutedSwatch() != null)
+            map.put("DarkMuted", p.getDarkMutedSwatch());
+        if (p.getLightMutedSwatch() != null)
+            map.put("LightMuted", p.getLightMutedSwatch());
+
+        return map;
     }
 
     @OnClick(R.id.btnPlayPause)

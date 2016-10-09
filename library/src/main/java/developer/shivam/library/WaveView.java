@@ -49,6 +49,7 @@ public class WaveView extends View {
     private Paint firstWaveColor;
     private Paint secondWaveColor;
 
+    int backGroundColor = Color.parseColor("#FFFFFF");
     /**
      * @frequency - Then less the frequency more will be the number of
      *  waves
@@ -120,8 +121,8 @@ public class WaveView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        canvas.drawColor(Color.parseColor("#BBDEFB"));
-        quadrant = getHeight()/3;
+        canvas.drawColor(Color.parseColor("#212121"));
+        quadrant = getHeight()/5;
         width = canvas.getWidth();
 
         firstWavePath.moveTo(0, getHeight());
@@ -133,7 +134,7 @@ public class WaveView extends View {
             x = (float) i;
 
             y1 = quadrant + amplitude * (float) Math.sin(((i + 10) * Math.PI / frequency) + shift);
-            y2 = quadrant * 2 + amplitude * (float) Math.sin(((i + 10) * Math.PI / frequency) + shift);
+            y2 = quadrant * 4 + amplitude * (float) Math.sin(((i + 10) * Math.PI / frequency) + shift);
 
             firstWavePath.lineTo(x, y1);
             secondWavePath.lineTo(x, y2);
@@ -172,11 +173,25 @@ public class WaveView extends View {
         invalidate();
     }
 
+    public void setColor(String color) {
+        secondWaveColor.setColor(Color.parseColor(color));
+        invalidate();
+    }
+
+    public void setColorOne(String color) {
+        firstWaveColor.setColor(Color.parseColor(color));
+        invalidate();
+    }
+
     public void start() {
         toPlay = true;
     }
 
     public void stop() {
         toPlay = false;
+    }
+
+    public void setBackGroundColor(String color) {
+        backGroundColor = Color.parseColor("color");
     }
 }

@@ -1,9 +1,7 @@
 package developer.shivam.joyplayer.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +17,7 @@ import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.activity.MainActivity;
 import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.model.Songs;
-import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
-import developer.shivam.joyplayer.util.Helper;
 import developer.shivam.joyplayer.util.HelperMethods;
 
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {

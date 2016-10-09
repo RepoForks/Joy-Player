@@ -24,11 +24,31 @@
 
             <ImageView
                 android:id="@+id/ivAlbumArt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_margin="40dp"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_centerHorizontal="true"
                 android:src="@drawable/default_album_art"
                 android:transitionName="@string/same_album_art" />
+            
+            <TextView android:id="@+id/tvSongName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/ivAlbumArt"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="30dp"
+                android:textSize="24sp"
+                android:textAlignment="center"
+                android:text="Baaki Baatein Peene Baad"/>
+
+            <TextView android:id="@+id/tvSongArtist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tvSongName"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="0dp"
+                android:textSize="18sp"
+                android:textAlignment="center"
+                android:text="Baaki Baatein Peene Baad"/>
         </RelativeLayout>
 
         <LinearLayout
