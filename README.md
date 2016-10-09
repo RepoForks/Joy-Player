@@ -1,1 +1,1 @@
-##Joy Player - Open-Source Music Player
+#Joy Player
