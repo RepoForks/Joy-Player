@@ -7,4 +7,9 @@
     <dimen name="wave_height">4dp</dimen>
     <dimen name="footer_height">4dp</dimen>
     <dimen name="horizontal_card_margin">8dp</dimen>
+
+    <dimen name="pause_bar_width">8dp</dimen>
+    <dimen name="pause_bar_distance">5dp</dimen>
+    <dimen name="pause_bar_height">25dp</dimen>
+
 </resources>

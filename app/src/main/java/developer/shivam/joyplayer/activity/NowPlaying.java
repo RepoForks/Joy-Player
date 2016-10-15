@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -37,6 +38,7 @@ import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.HelperMethods;
+import developer.shivam.joyplayer.view.PlayPauseView;
 import developer.shivam.library.WaveView;
 
 public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
@@ -44,17 +46,20 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @BindView(R.id.ivAlbumArt)
     ImageView ivAlbumArt;
 
+    @BindView(R.id.cvAlbumArt)
+    CardView albumArtContainer;
+
     @BindView(R.id.seekBar)
     SeekBar seekBar;
 
     @BindView(R.id.btnPlayPause)
-    Button btnPlayPause;
+    PlayPauseView btnPlayPause;
 
-    @BindView(R.id.btnPrevious)
-    Button btnPrevious;
+    @BindView(R.id.ivPrevious)
+    ImageView btnPrevious;
 
-    @BindView(R.id.btnNext)
-    Button btnNext;
+    @BindView(R.id.ivNext)
+    ImageView btnNext;
 
     @BindView(R.id.tvCurrentDuration)
     TextView tvCurrentDuration;
@@ -125,6 +130,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
     }
 
     private void updateView(PlayerService service) {
@@ -177,7 +183,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         Uri albumArtUri = Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()));
         Picasso.with(mContext).load(albumArtUri).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
-        ivAlbumArt.setAlpha(200);
+        ivAlbumArt.setAlpha(0.9f);
+        albumArtContainer.setAlpha(0.9f);
         tvSongName.setText(track.getName());
         tvSongArtist.setText(track.getSingerName());
         setCurrentAlbumArt(albumArtUri);
@@ -237,19 +244,24 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         isPlaying = !isPlaying;
         mPlayerService.playPause();
         if (isPlaying) {
+            btnPlayPause.toggle();
             nowPlayView.start();
+
+
         } else {
+            btnPlayPause.toggle();
             nowPlayView.stop();
+
         }
     }
 
-    @OnClick(R.id.btnPrevious)
+    @OnClick(R.id.ivPrevious)
     public void playPreviousSong() {
         mPlayerService.playPrevious();
         setCurrentSong();
     }
 
-    @OnClick(R.id.btnNext)
+    @OnClick(R.id.ivNext)
     public void playNextSong() {
         mPlayerService.playNext();
         setCurrentSong();
@@ -277,4 +289,5 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         }
         return super.onOptionsItemSelected(item);
     }
+
 }

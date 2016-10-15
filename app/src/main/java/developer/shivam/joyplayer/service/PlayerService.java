@@ -10,6 +10,7 @@ package developer.shivam.joyplayer.service;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -19,6 +20,7 @@ import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
@@ -26,6 +28,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.util.State;
 
@@ -325,7 +328,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         }
     }
 
-    /*public void showBubble() {
+    public void showBubble() {
         mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
         bubbleImageView = new ImageView(this);
         bubbleImageView.setImageResource(R.drawable.default_album_art);
@@ -346,5 +349,5 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (bubbleImageView != null) {
             mWindowManager.removeView(bubbleImageView);
         }
-    }*/
+    }
 }

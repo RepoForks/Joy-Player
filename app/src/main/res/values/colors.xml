@@ -5,5 +5,8 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF9800</color>
 
+    <color name="purple">#FF9800</color>
+    <color name="blue">#FF9800</color>
+
     <color name="background">#FFFFFF</color>
 </resources>

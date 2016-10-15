@@ -106,12 +106,12 @@ public class WaveView extends View {
         firstWaveColor = new Paint();
         firstWaveColor.setAntiAlias(true);
         firstWaveColor.setStrokeWidth(2);
-        firstWaveColor.setColor(Color.parseColor("#64B5F6"));
+        firstWaveColor.setColor(Color.parseColor("#424242"));
 
         secondWaveColor = new Paint();
         secondWaveColor.setAntiAlias(true);
         secondWaveColor.setStrokeWidth(2);
-        secondWaveColor.setColor(Color.parseColor("#2196F3"));
+        secondWaveColor.setColor(Color.parseColor("#848484"));
 
         handler = new Handler();
         handler.postDelayed(new WaveRunnable(), 16);
@@ -122,7 +122,7 @@ public class WaveView extends View {
         super.onDraw(canvas);
 
         canvas.drawColor(Color.parseColor("#212121"));
-        quadrant = getHeight()/5;
+        quadrant = (int) (getHeight()/5.1f);
         width = canvas.getWidth();
 
         firstWavePath.moveTo(0, getHeight());
