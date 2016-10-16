@@ -33,6 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlayerService;
@@ -44,10 +45,7 @@ import developer.shivam.library.WaveView;
 public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
 
     @BindView(R.id.ivAlbumArt)
-    ImageView ivAlbumArt;
-
-    @BindView(R.id.cvAlbumArt)
-    CardView albumArtContainer;
+    CircleImageView ivAlbumArt;
 
     @BindView(R.id.seekBar)
     SeekBar seekBar;
@@ -184,7 +182,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         Picasso.with(mContext).load(albumArtUri).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
         ivAlbumArt.setAlpha(0.9f);
-        albumArtContainer.setAlpha(0.9f);
         tvSongName.setText(track.getName());
         tvSongArtist.setText(track.getSingerName());
         setCurrentAlbumArt(albumArtUri);

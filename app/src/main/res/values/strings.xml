@@ -6,6 +6,5 @@
     <string name="btn_cancel">Cancel</string>
     <string name="same_album_art">SharedAlbumArt</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="native_ad_unit_id">ca-app-pub-5732233846040446/3178149814</string>
 </resources>

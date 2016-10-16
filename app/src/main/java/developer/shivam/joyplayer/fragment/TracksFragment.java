@@ -51,7 +51,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
         public void onServiceConnected(ComponentName className,
                                        IBinder service) {
             /**
-             * We now bind client (activity) with service
+             * We now bind client (fragment) with service
              */
             PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) service;
             mPlayerService = binder.getService();
@@ -162,5 +162,13 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
         } else {
             startActivity(nowPlayingIntent);
         }*/
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (mBound) {
+            mContext.unbindService(mConnection);
+        }
     }
 }

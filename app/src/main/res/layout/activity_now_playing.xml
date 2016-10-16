@@ -25,28 +25,18 @@
             android:layout_height="0dp"
             android:layout_weight="5">
 
-            <android.support.v7.widget.CardView
-                android:id="@+id/cvAlbumArt"
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivAlbumArt"
                 android:layout_width="280dp"
                 android:layout_height="280dp"
                 android:layout_centerHorizontal="true"
-                app:cardCornerRadius="140dp"
-                app:cardElevation="10dp">
-
-                <ImageView
-                    android:id="@+id/ivAlbumArt"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:src="@drawable/default_album_art"
-                    android:transitionName="@string/same_album_art" />
-            </android.support.v7.widget.CardView>
+                android:src="@drawable/default_album_art" />
 
             <TextView
                 android:id="@+id/tvSongName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/cvAlbumArt"
+                android:layout_below="@id/ivAlbumArt"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
                 android:ellipsize="marquee"
@@ -98,8 +88,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:layout_marginBottom="10dp">
+                android:layout_marginBottom="10dp"
+                android:gravity="center">
 
                 <android.support.v7.widget.CardView
                     android:layout_width="40dp"
@@ -120,7 +110,7 @@
                     android:id="@+id/btnPlayPause"
                     android:layout_width="55dp"
                     android:layout_height="55dp"
-                    android:layout_centerHorizontal="true"/>
+                    android:layout_centerHorizontal="true" />
 
                 <android.support.v7.widget.CardView
                     android:layout_width="40dp"

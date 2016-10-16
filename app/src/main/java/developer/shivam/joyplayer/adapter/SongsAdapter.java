@@ -8,6 +8,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.NativeExpressAdView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -20,12 +22,21 @@ import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.HelperMethods;
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     Context mContext;
     List<Songs> mSongsList = new ArrayList<>();
     MainActivity activity = null;
     OnClickListener listener;
+
+    /**
+     * This means after how many items ad should come.
+     */
+    final int AD_AFTER_ITEMS = 10;
+
+    final int TYPE_SONG_ITEM = 0;
+
+    final int TYPE_AD_ITEM = 1;
 
     public SongsAdapter(Context context, List<Songs> songsList) {
         mContext = context;
@@ -33,16 +44,34 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
     }
 
     @Override
-    public SongsAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(mContext).inflate(R.layout.song_item_row_layout, null);
-        return new ViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (viewType == TYPE_SONG_ITEM) {
+            return new ViewHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_row_song_item, null));
+        } else {
+            return new AdHolder(LayoutInflater.from(mContext).inflate(R.layout.layout_row_ad_item, null));
+        }
     }
 
     @Override
-    public void onBindViewHolder(SongsAdapter.ViewHolder holder, int position) {
-        holder.tvSongName.setText(mSongsList.get(position).getName());
-        holder.tvSingerName.setText(mSongsList.get(position).getSingerName() + " · " + HelperMethods.getSongDuration(Integer.valueOf(mSongsList.get(position).getDuration())));
-        Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(holder.ivAlbumArt);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof ViewHolder) {
+            ViewHolder songHolder = (ViewHolder) holder;
+            songHolder.tvSongName.setText(mSongsList.get(position).getName());
+            songHolder.tvSingerName.setText(mSongsList.get(position).getSingerName() + " · " + HelperMethods.getSongDuration(Integer.valueOf(mSongsList.get(position).getDuration())));
+            Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(songHolder.ivAlbumArt);
+        } else if (holder instanceof AdHolder) {
+            AdHolder adHolder = (AdHolder) holder;
+            adHolder.adView.loadAd(new AdRequest.Builder().build());
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (position == 0) {
+            return TYPE_SONG_ITEM;
+        } else {
+            return position % 20 == 0 ? TYPE_AD_ITEM : TYPE_SONG_ITEM;
+        }
     }
 
     @Override
@@ -54,7 +83,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         this.listener = listener;
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvSongName;
         TextView tvSingerName;
@@ -71,6 +100,16 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.ViewHolder> 
         @Override
         public void onClick(View view) {
             listener.onClick(ivAlbumArt, getPosition());
+        }
+    }
+
+    class AdHolder extends RecyclerView.ViewHolder {
+
+        NativeExpressAdView adView;
+
+        public AdHolder(View itemView) {
+            super(itemView);
+            adView = (NativeExpressAdView) itemView.findViewById(R.id.nativeExpressAdView);
         }
     }
 }

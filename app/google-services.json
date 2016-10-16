@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "733399359882",
+    "firebase_url": "https://joyplayer-9366f.firebaseio.com",
+    "project_id": "joyplayer-9366f",
+    "storage_bucket": "joyplayer-9366f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:733399359882:android:5091db2ee449d5f5",
+        "android_client_info": {
+          "package_name": "developer.shivam.joyplayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "733399359882-merhvpv0uct7itop47osq2pa3bj3frgs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfVeofgz_BtPTviEn9TD8KcU4ER7HsS3M"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

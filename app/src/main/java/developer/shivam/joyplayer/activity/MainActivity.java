@@ -54,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
 
         List<Fragment> fragmentList = new Vector<>();
         fragmentList.add(Fragment.instantiate(mContext, TracksFragment.class.getName()));
-        fragmentList.add(Fragment.instantiate(mContext, TracksFragment.class.getName()));
         viewPager.setAdapter(new ViewPagerAdapter(mContext, getSupportFragmentManager(), fragmentList));
         tabLayout.setupWithViewPager(viewPager);
     }
@@ -71,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void setUpNavigationDrawer() {
         DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        NavigationView drawerNavigationView = (NavigationView) findViewById(R.id.mainActivityNavigationView);
         final ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(this,
                 mDrawerLayout,
                 toolbar,
@@ -97,11 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 drawerToggle.syncState();
             }
         });
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
