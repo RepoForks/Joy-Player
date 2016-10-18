@@ -10,14 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="67850850-7636-4827-9d92-f24a23450a15" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_row_ad_item.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_row_ad_item.xml" />
     </list>
     <ignored path="Joy-Player.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,7 +49,7 @@
       <file leaf-file-name="PlayerService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1928">
+            <state relative-caret-position="398">
               <caret line="299" column="5" selection-start-line="299" selection-start-column="5" selection-end-line="299" selection-end-column="5" />
               <folding>
                 <element signature="method#playSong#0;class#PlayerService#0" expanded="false" />
@@ -64,23 +59,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="NowPlaying.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="NowPlaying.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="308">
-              <caret line="270" column="14" selection-start-line="270" selection-start-column="14" selection-end-line="270" selection-end-column="14" />
+            <state relative-caret-position="578">
+              <caret line="296" column="47" selection-start-line="296" selection-start-column="47" selection-end-line="296" selection-end-column="47" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="TracksFragment.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="TracksFragment.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="135" column="0" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
+            <state relative-caret-position="560">
+              <caret line="164" column="4" selection-start-line="164" selection-start-column="4" selection-end-line="170" selection-end-column="5" />
               <folding>
                 <element signature="method#loadHorizontalRecentlyAddedItems#0;class#TracksFragment#0" expanded="false" />
+                <element signature="e#5700#5701#0" expanded="true" />
+                <element signature="e#5731#5732#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -2729,8 +2726,8 @@
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_row_ad_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" />
       </list>
     </option>
   </component>
@@ -2770,7 +2767,7 @@
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
-    <property name="device.picker.selection" value="192.168.56.101:5555" />
+    <property name="device.picker.selection" value="ce031603b2c6613904" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
     <property name="VectorAssetImportPath" value="$PROJECT_DIR$/../.." />
   </component>
@@ -3282,7 +3279,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1928">
+        <state relative-caret-position="398">
           <caret line="299" column="5" selection-start-line="299" selection-start-column="5" selection-end-line="299" selection-end-column="5" />
           <folding>
             <element signature="method#playSong#0;class#PlayerService#0" expanded="false" />
@@ -3291,21 +3288,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="270" column="14" selection-start-line="270" selection-start-column="14" selection-end-line="270" selection-end-column="14" />
-          <folding />
+        <state relative-caret-position="560">
+          <caret line="164" column="4" selection-start-line="164" selection-start-column="4" selection-end-line="170" selection-end-column="5" />
+          <folding>
+            <element signature="method#loadHorizontalRecentlyAddedItems#0;class#TracksFragment#0" expanded="false" />
+            <element signature="e#5700#5701#0" expanded="true" />
+            <element signature="e#5731#5732#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="135" column="0" selection-start-line="135" selection-start-column="0" selection-end-line="135" selection-end-column="0" />
-          <folding>
-            <element signature="method#loadHorizontalRecentlyAddedItems#0;class#TracksFragment#0" expanded="false" />
-          </folding>
+        <state relative-caret-position="578">
+          <caret line="296" column="47" selection-start-line="296" selection-start-column="47" selection-end-line="296" selection-end-column="47" />
+          <folding />
         </state>
       </provider>
     </entry>
