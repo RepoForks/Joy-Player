@@ -37,6 +37,7 @@ import developer.shivam.joyplayer.util.PermissionManager;
 
 public class TracksFragment extends Fragment implements onPermissionListener, OnClickListener {
 
+    final String TAG = "TRACKS_FRAGMENT";
     Context mContext;
     List<Songs> songsList = new ArrayList<>();
     RecyclerView rvSongsList;
@@ -56,11 +57,12 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) service;
             mPlayerService = binder.getService();
             mBound = true;
+            Log.d(TAG, "Connection made to Player Service");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName arg0) {
-            Log.d("ServiceConnection", "Connection removed");
+            Log.d(TAG, "Connection removed");
             mBound = false;
         }
     };
@@ -153,22 +155,13 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
 
         Intent nowPlayingIntent = new Intent(mContext, NowPlaying.class);
         startActivity(nowPlayingIntent);
-
-        /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            ActivityOptionsCompat optionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
-                    view,
-                    getResources().getString(R.string.same_album_art));
-            startActivity(nowPlayingIntent, optionsCompat.toBundle());
-        } else {
-            startActivity(nowPlayingIntent);
-        }*/
     }
 
     @Override
     public void onPause() {
         super.onPause();
         if (mBound) {
-            mContext.unbindService(mConnection);
+            //mContext.unbindService(mConnection);
         }
     }
 }

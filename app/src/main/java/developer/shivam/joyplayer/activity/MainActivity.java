@@ -28,7 +28,8 @@ import developer.shivam.joyplayer.fragment.TracksFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Toolbar toolbar;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.viewPager)
     ViewPager viewPager;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        mapping();
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
 
@@ -62,10 +62,6 @@ public class MainActivity extends AppCompatActivity {
     public void openNowPlaying() {
         Intent nowPlayingActivity = new Intent(this, NowPlaying.class);
         startActivity(nowPlayingActivity);
-    }
-
-    private void mapping() {
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
     }
 
     private void setUpNavigationDrawer() {

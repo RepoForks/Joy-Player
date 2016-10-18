@@ -50,9 +50,13 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  basic MediaPlayer functionality
      */
     public MediaPlayer mPlayer = null;
+
     private Uri songUri;
+
     private int playerState = 0;
+
     private List<Songs> songsList = new ArrayList<>();
+
     public boolean isRunningInBackground = false;
 
     /**
@@ -66,6 +70,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      *  song at which position is playing
      */
     private int position;
+
     private PhoneStateListener mPhoneStateListener;
 
     /**
@@ -142,7 +147,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      */
     @Override
     public IBinder onBind(Intent intent) {
-
         return mBinder;
     }
 
@@ -288,6 +292,7 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     public void setSongsList(List<Songs> songsList) {
         this.songsList = songsList;
+        Log.d("Songs list size", String.valueOf(this.songsList.size()));
     }
 
     private Uri getSongUri() {
@@ -325,29 +330,6 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
-        }
-    }
-
-    public void showBubble() {
-        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
-        bubbleImageView = new ImageView(this);
-        bubbleImageView.setImageResource(R.drawable.default_album_art);
-
-        WindowManager.LayoutParams mLayoutParams = new WindowManager.LayoutParams(100, 100,
-                WindowManager.LayoutParams.TYPE_PHONE,
-                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                PixelFormat.TRANSPARENT);
-
-        mLayoutParams.gravity = Gravity.TOP | Gravity.START;
-        mLayoutParams.x = 0;
-        mLayoutParams.y = 100;
-
-        mWindowManager.addView(bubbleImageView, mLayoutParams);
-    }
-
-    public void hideBubble() {
-        if (bubbleImageView != null) {
-            mWindowManager.removeView(bubbleImageView);
         }
     }
 }

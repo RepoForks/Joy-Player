@@ -24,23 +24,28 @@ import developer.shivam.joyplayer.util.HelperMethods;
 
 public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    Context mContext;
-    List<Songs> mSongsList = new ArrayList<>();
-    MainActivity activity = null;
-    OnClickListener listener;
+    private Context mContext;
+    private List<Songs> mSongsList = new ArrayList<>();
+    private OnClickListener listener;
 
     /**
      * This means after how many items ad should come.
      */
-    final int AD_AFTER_ITEMS = 10;
+    private int AD_AFTER_ITEMS = 20;
 
-    final int TYPE_SONG_ITEM = 0;
+    private final int TYPE_SONG_ITEM = 0;
 
-    final int TYPE_AD_ITEM = 1;
+    private final int TYPE_AD_ITEM = 1;
 
     public SongsAdapter(Context context, List<Songs> songsList) {
         mContext = context;
         mSongsList = songsList;
+
+        if (mSongsList.size() > 0 && mSongsList.size() < 100) {
+            AD_AFTER_ITEMS = 20;
+        } else if (mSongsList.size() < 200){
+            AD_AFTER_ITEMS = 40;
+        }
     }
 
     @Override
@@ -70,7 +75,7 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         if (position == 0) {
             return TYPE_SONG_ITEM;
         } else {
-            return position % 20 == 0 ? TYPE_AD_ITEM : TYPE_SONG_ITEM;
+            return position % AD_AFTER_ITEMS == 0 ? TYPE_AD_ITEM : TYPE_SONG_ITEM;
         }
     }
 
@@ -83,13 +88,13 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.listener = listener;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView tvSongName;
         TextView tvSingerName;
         ImageView ivAlbumArt;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvSongName = (TextView) itemView.findViewById(R.id.tvSongName);
             tvSingerName = (TextView) itemView.findViewById(R.id.tvSingerName);
@@ -99,15 +104,15 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         public void onClick(View view) {
-            listener.onClick(ivAlbumArt, getPosition());
+            listener.onClick(ivAlbumArt, getAdapterPosition());
         }
     }
 
-    class AdHolder extends RecyclerView.ViewHolder {
+    private class AdHolder extends RecyclerView.ViewHolder {
 
         NativeExpressAdView adView;
 
-        public AdHolder(View itemView) {
+        AdHolder(View itemView) {
             super(itemView);
             adView = (NativeExpressAdView) itemView.findViewById(R.id.nativeExpressAdView);
         }

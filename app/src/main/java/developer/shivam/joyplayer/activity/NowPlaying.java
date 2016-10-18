@@ -105,7 +105,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) iBinder;
             mBound = true;
             mPlayerService = binder.getService();
-            mPlayerService.isRunningInBackground = false;
             updateView(mPlayerService);
             Log.d("NowPlaying", "Service bounded with " + songsList.size() + " songs");
         }
@@ -139,6 +138,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
          *  only perform mediaPlayer operation
          */
         if (mPlayerService != null) {
+            System.out.println(mPlayerService.getSongsList().size());
             setCurrentSong();
             mPlayerService.mPlayer.setOnCompletionListener(this);
 
@@ -268,8 +268,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     protected void onPause() {
         super.onPause();
         if (mBound) {
-            mPlayerService.isRunningInBackground = true;
-            unbindService(mConnection);
+            //unbindService(mConnection);
         }
     }
 
