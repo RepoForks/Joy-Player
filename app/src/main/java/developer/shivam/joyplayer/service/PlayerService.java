@@ -7,6 +7,8 @@ package developer.shivam.joyplayer.service;
  * like Activities
  */
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -23,6 +25,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.RemoteViews;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -84,6 +87,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
      * bubbleImageView is the view which will be added to the view
      */
     private ImageView bubbleImageView;
+    private Notification mNotification;
+    private Notification.Builder notificationBuilder;
 
     public class PlayerBinder extends Binder {
         public PlayerService getService() {
@@ -128,6 +133,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
+
+        notificationBuilder = new Notification.Builder(getApplicationContext());
     }
 
     @Override
@@ -190,6 +197,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
             e.printStackTrace();
         }
         mPlayer.prepareAsync();
+
+        showNotification();
     }
 
     /**
@@ -331,5 +340,27 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
+    }
+
+    public void showNotification() {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_media);
+
+        notificationView.setTextViewText(R.id.notify_song_name, songsList.get(position).getName());
+
+        mNotification = notificationBuilder
+                .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true)
+                .setWhen(System.currentTimeMillis())
+                .setContent(notificationView)
+                .setDefaults(Notification.FLAG_NO_CLEAR)
+                .build();
+        notificationManager.notify(200, mNotification);
+    }
+
+    private void updateNotification(String songName) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotification.contentView.setTextViewText(R.id.notify_song_name, songName);
+        notificationManager.notify(200, mNotification);
     }
 }
