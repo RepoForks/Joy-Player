@@ -100,6 +100,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         super.onResume();
 
         Intent playServiceIntent = new Intent(mContext, PlayerService.class);
+        startService(playServiceIntent);
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         nowPlayView.setAmplitude(1);
@@ -296,7 +297,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         super.onDestroy();
         handler.removeCallbacks(seekBarRunnable);
         if (mBound) {
-            mContext.unbindService(mConnection);
+            //mContext.unbindService(mConnection);
         }
     }
 }
