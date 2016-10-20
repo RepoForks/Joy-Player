@@ -82,6 +82,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
     Handler handler;
+    SeekBarRunnable seekBarRunnable;
     boolean isPlaying = true;
     SeekBarRunnable seekBarRunnable;
 
@@ -109,6 +110,9 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         } else {
             nowPlayView.stop();
         }
+
+        handler = new Handler();
+        seekBarRunnable = new SeekBarRunnable();
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -139,7 +143,16 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+    }
 
+    private class SeekBarRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            seekBar.setProgress(mPlayerService.getPlayerPosition());
+            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlayerService.getPlayerPosition()));
+            handler.postDelayed(this, 100);
+        }
     }
 
     private void updateView(PlayerService service) {
@@ -154,9 +167,12 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             setCurrentSong();
             mPlayerService.mPlayer.setOnCompletionListener(this);
 
+<<<<<<< HEAD
             seekBarRunnable = new SeekBarRunnable();
 
             handler = new Handler();
+=======
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
             handler.post(seekBarRunnable);
 
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -273,6 +289,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @Override
     protected void onPause() {
         super.onPause();
+        handler.removeCallbacks(seekBarRunnable);
         if (mBound) {
             //unbindService(mConnection);
         }
@@ -291,6 +308,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         }
         return super.onOptionsItemSelected(item);
     }
+<<<<<<< HEAD
 
     @Override
     public void onDestroy() {
@@ -300,4 +318,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             //mContext.unbindService(mConnection);
         }
     }
+=======
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
 }

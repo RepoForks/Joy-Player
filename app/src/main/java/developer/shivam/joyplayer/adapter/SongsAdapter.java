@@ -20,6 +20,7 @@ import developer.shivam.joyplayer.activity.MainActivity;
 import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.ConnectionDetector;
 import developer.shivam.joyplayer.util.HelperMethods;
 
 public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -72,10 +73,10 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            return TYPE_SONG_ITEM;
-        } else {
+        if (ConnectionDetector.hasNetworkConnection(mContext)) {
             return position % AD_AFTER_ITEMS == 0 ? TYPE_AD_ITEM : TYPE_SONG_ITEM;
+        } else {
+            return TYPE_SONG_ITEM;
         }
     }
 
