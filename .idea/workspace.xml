@@ -12,8 +12,18 @@
     <list default="true" id="5e5a6812-7d66-429a-9904-7929ed0824f0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+<<<<<<< HEAD
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/notification_media.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/notification_media.xml" />
+=======
+<<<<<<< HEAD
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" />
+=======
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java" afterPath="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/layout_row_song_item.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/layout_row_song_item.xml" />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
     </list>
     <ignored path="Joy-Player.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -45,6 +55,9 @@
     <favorites_list name="Joy-Player" />
   </component>
   <component name="FileEditorManager">
+<<<<<<< HEAD
+    <leaf />
+=======
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="PlayerService.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
@@ -90,6 +103,7 @@
         </entry>
       </file>
     </leaf>
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -2852,13 +2866,26 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
+<<<<<<< HEAD
+=======
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/notification_media.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" />
+<<<<<<< HEAD
+        <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" />
+=======
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/layout_row_song_item.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/util/ConnectionDetector.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/notification_media.xml" />
+=======
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
       </list>
     </option>
   </component>
@@ -2941,12 +2968,17 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="last_opened_file_path" value="$USER_HOME$/Desktop/Tadqa_19102016" />
     <property name="UI_DESIGNER_EDITOR_MODE.NlPaletteManager-NlPreviewForm.SHOW" value="false" />
+<<<<<<< HEAD
+    <property name="VectorAssetImportPath" value="$PROJECT_DIR$/../.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Diagonalify" />
+=======
     <property name="device.picker.selection" value="ce031603b2c6613904" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/app/src/main/res/layout" />
     </key>
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
   </component>
   <component name="RunManager" selected="Android App.app">
     <configuration default="true" type="AndroidRunConfigurationType" factoryName="Android App">
@@ -3256,8 +3288,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
+<<<<<<< HEAD
     <frame x="57" y="24" width="1309" height="744" extended-state="6" />
     <editor active="true" />
+=======
+<<<<<<< HEAD
+    <frame x="65" y="24" width="1535" height="876" extended-state="6" />
+=======
+    <frame x="57" y="-4" width="1309" height="772" extended-state="6" />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+    <editor active="false" />
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
     <layout>
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="true" content_ui="tabs" />
@@ -3277,7 +3318,16 @@
       <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32858273" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.34175533" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32903227" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.22644497" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -3289,6 +3339,14 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31648937" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+=======
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
     </layout>
@@ -3311,6 +3369,7 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="5418">
           <caret line="348" column="85" selection-start-line="348" selection-start-column="85" selection-end-line="348" selection-end-column="85" />
           <folding>
@@ -3350,6 +3409,29 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
       <provider selected="true" editor-type-id="text-editor">
+=======
+<<<<<<< HEAD
+        <state relative-caret-position="1926">
+          <caret line="130" column="5" selection-start-line="130" selection-start-column="5" selection-end-line="130" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/build.gradle">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="54">
+          <caret line="3" column="27" selection-start-line="3" selection-start-column="27" selection-end-line="3" selection-end-column="27" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/library/src/main/AndroidManifest.xml">
+      <provider editor-type-id="android-manifest">
+        <state />
+      </provider>
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         <state relative-caret-position="4626">
           <caret line="291" column="0" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
           <folding>
@@ -3380,6 +3462,11 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="666">
           <caret line="77" column="1" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
+<<<<<<< HEAD
+=======
+          <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         </state>
       </provider>
     </entry>
@@ -3466,9 +3553,14 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="90">
+          <caret line="5" column="28" selection-start-line="5" selection-start-column="28" selection-end-line="5" selection-end-column="28" />
+=======
         <state relative-caret-position="180">
           <caret line="10" column="78" selection-start-line="10" selection-start-column="78" selection-end-line="10" selection-end-column="78" />
           <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
         </state>
       </provider>
     </entry>
@@ -3477,8 +3569,17 @@
         <state />
       </provider>
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="126">
+          <caret line="7" column="32" selection-start-line="7" selection-start-column="26" selection-end-line="7" selection-end-column="32" />
+=======
         <state relative-caret-position="684">
           <caret line="38" column="38" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="38" />
+<<<<<<< HEAD
+=======
+          <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         </state>
       </provider>
     </entry>
@@ -3519,6 +3620,10 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="180">
+          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+=======
         <state relative-caret-position="4626">
           <caret line="291" column="0" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
           <folding>
@@ -3542,13 +3647,23 @@
             <element signature="e#9779#9780#0" expanded="false" />
             <element signature="e#9810#9811#0" expanded="false" />
           </folding>
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
+        <state relative-caret-position="198">
+          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+=======
         <state relative-caret-position="4194">
           <caret line="273" column="47" selection-start-line="273" selection-start-column="47" selection-end-line="273" selection-end-column="47" />
+<<<<<<< HEAD
+=======
+          <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         </state>
       </provider>
     </entry>
@@ -3562,31 +3677,79 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/activity/NowPlaying.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="666">
           <caret line="77" column="1" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
         </state>
+=======
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_now_playing.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="340">
+          <caret line="105" column="1" selection-start-line="105" selection-start-column="1" selection-end-line="105" selection-end-column="1" />
+=======
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/notification_media.xml">
+      <provider editor-type-id="android-designer2">
+        <state />
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/adapter/SongsAdapter.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="396">
           <caret line="43" column="0" selection-start-line="43" selection-start-column="0" selection-end-line="43" selection-end-column="0" />
+=======
+        <state relative-caret-position="558">
+          <caret line="31" column="42" selection-start-line="31" selection-start-column="42" selection-end-line="31" selection-end-column="42" />
+          <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         </state>
+      </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/util/ConnectionDetector.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="108">
           <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+=======
+<<<<<<< HEAD
+        <state relative-caret-position="848">
+          <caret line="100" column="4" selection-start-line="100" selection-start-column="4" selection-end-line="100" selection-end-column="4" />
+=======
+        <state relative-caret-position="4626">
+          <caret line="291" column="0" selection-start-line="291" selection-start-column="0" selection-end-line="291" selection-end-column="0" />
+          <folding>
+            <element signature="e#9161#9162#0" expanded="true" />
+          </folding>
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="180">
           <caret line="10" column="78" selection-start-line="10" selection-start-column="78" selection-end-line="10" selection-end-column="78" />
+=======
+<<<<<<< HEAD
+        <state relative-caret-position="1008">
+          <caret line="79" column="5" selection-start-line="79" selection-start-column="5" selection-end-line="79" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/layout_row_ad_item.xml">
+=======
+        <state relative-caret-position="666">
+          <caret line="77" column="1" selection-start-line="77" selection-start-column="1" selection-end-line="77" selection-end-column="1" />
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
           <folding />
         </state>
       </provider>
@@ -3598,12 +3761,17 @@
       <provider editor-type-id="android-designer2">
         <state />
       </provider>
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="496">
           <caret line="38" column="38" selection-start-line="38" selection-start-column="38" selection-end-line="38" selection-end-column="38" />
         </state>
       </provider>
+      <provider editor-type-id="android-designer2">
+        <state />
+      </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_now_playing.xml">
       <provider editor-type-id="android-designer2">
         <state />
@@ -3611,13 +3779,43 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+=======
+<<<<<<< HEAD
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/fragment/TracksFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1656">
+          <caret line="142" column="13" selection-start-line="142" selection-start-column="13" selection-end-line="142" selection-end-column="13" />
+=======
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="10" column="78" selection-start-line="10" selection-start-column="78" selection-end-line="10" selection-end-column="78" />
+          <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
       <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
         <state relative-caret-position="5418">
           <caret line="348" column="85" selection-start-line="348" selection-start-column="85" selection-end-line="348" selection-end-column="85" />
+=======
+<<<<<<< HEAD
+        <state relative-caret-position="542">
+          <caret line="299" column="14" selection-start-line="299" selection-start-column="14" selection-end-line="299" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/developer/shivam/joyplayer/service/PlayerService.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4896">
+          <caret line="309" column="28" selection-start-line="309" selection-start-column="28" selection-end-line="309" selection-end-column="28" />
+=======
+        <state relative-caret-position="72">
+          <caret line="6" column="33" selection-start-line="6" selection-start-column="33" selection-end-line="6" selection-end-column="33" />
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
           <folding>
             <element signature="imports" expanded="false" />
             <element signature="e#4468#4469#0" expanded="false" />
@@ -3650,6 +3848,7 @@
         <state relative-caret-position="90">
           <caret line="5" column="27" selection-start-line="5" selection-start-column="27" selection-end-line="5" selection-end-column="27" />
           <folding />
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
         </state>
       </provider>
     </entry>

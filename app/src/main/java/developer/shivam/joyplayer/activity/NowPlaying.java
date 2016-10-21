@@ -82,12 +82,28 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     Handler handler;
     SeekBarRunnable seekBarRunnable;
     boolean isPlaying = true;
+    SeekBarRunnable seekBarRunnable;
+
+    public class SeekBarRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            seekBar.setProgress(mPlayerService.getPlayerPosition());
+            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlayerService.getPlayerPosition()));
+            handler.postDelayed(this, 100);
+        }
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
 
+<<<<<<< HEAD
         Intent playServiceIntent = new Intent(mContext, PlaybackService.class);
+=======
+        Intent playServiceIntent = new Intent(mContext, PlayerService.class);
+        startService(playServiceIntent);
+>>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         nowPlayView.setAmplitude(1);
@@ -153,6 +169,12 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             setCurrentSong();
             mPlaybackService.mPlayer.setOnCompletionListener(this);
 
+<<<<<<< HEAD
+            seekBarRunnable = new SeekBarRunnable();
+
+            handler = new Handler();
+=======
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
             handler.post(seekBarRunnable);
 
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -288,4 +310,16 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         }
         return super.onOptionsItemSelected(item);
     }
+<<<<<<< HEAD
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        handler.removeCallbacks(seekBarRunnable);
+        if (mBound) {
+            //mContext.unbindService(mConnection);
+        }
+    }
+=======
+>>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
 }

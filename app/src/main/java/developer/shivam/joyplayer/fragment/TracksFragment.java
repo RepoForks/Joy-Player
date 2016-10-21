@@ -160,8 +160,13 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     @Override
     public void onPause() {
         super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
         if (mBound) {
-            //mContext.unbindService(mConnection);
+            mContext.unbindService(mConnection);
         }
     }
 }
