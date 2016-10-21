@@ -12,7 +12,6 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,7 +21,6 @@ import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RemoteViews;
@@ -33,6 +31,7 @@ import java.util.List;
 
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.State;
 
 /**
@@ -41,12 +40,12 @@ import developer.shivam.joyplayer.util.State;
  *  of application and ends with the onDestroy(). It will not run
  *  indefinitely in the background
  */
-public class PlayerService extends Service implements MediaPlayer.OnPreparedListener,
+public class PlaybackService extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
 
-    private static final String TAG = "PlayerService";
-    private Context mContext = PlayerService.this;
+    private static final String TAG = "PlaybackService";
+    private Context mContext = PlaybackService.this;
 
     /**
      * mPlayer is a media player object used to perform
@@ -91,9 +90,9 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
     private Notification.Builder notificationBuilder;
 
     public class PlayerBinder extends Binder {
-        public PlayerService getService() {
-            //This will return the object of the PlayerService
-            return PlayerService.this;
+        public PlaybackService getService() {
+            //This will return the object of the PlaybackService
+            return PlaybackService.this;
         }
     }
 
@@ -344,9 +343,8 @@ public class PlayerService extends Service implements MediaPlayer.OnPreparedList
 
     public void showNotification() {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_media);
-
+        notificationView.setImageViewUri(R.id.ivAlbumArt, Collector.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
         notificationView.setTextViewText(R.id.notify_song_name, songsList.get(position).getName());
 
         mNotification = notificationBuilder

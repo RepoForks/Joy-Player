@@ -31,7 +31,7 @@ import developer.shivam.joyplayer.adapter.SongsAdapter;
 import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.listener.onPermissionListener;
 import developer.shivam.joyplayer.model.Songs;
-import developer.shivam.joyplayer.service.PlayerService;
+import developer.shivam.joyplayer.service.PlaybackService;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.PermissionManager;
 
@@ -44,7 +44,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
 
     private boolean mBound = false;
 
-    private PlayerService mPlayerService;
+    private PlaybackService mPlaybackService;
 
     private ServiceConnection mConnection = new ServiceConnection() {
 
@@ -54,8 +54,8 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             /**
              * We now bind client (fragment) with service
              */
-            PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) service;
-            mPlayerService = binder.getService();
+            PlaybackService.PlayerBinder binder = (PlaybackService.PlayerBinder) service;
+            mPlaybackService = binder.getService();
             mBound = true;
             Log.d(TAG, "Connection made to Player Service");
         }
@@ -97,7 +97,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     @Override
     public void onResume() {
         super.onResume();
-        Intent playerServiceIntent = new Intent(mContext, PlayerService.class);
+        Intent playerServiceIntent = new Intent(mContext, PlaybackService.class);
         if (!mBound) {
             mContext.bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
         }
@@ -148,10 +148,10 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     @Override
     public void onClick(View view, int position) {
 
-        mPlayerService.setPosition(position);
-        mPlayerService.setSongUri(songsList.get(position).getSongUri());
-        mPlayerService.setSongsList(songsList);
-        mPlayerService.playSong();
+        mPlaybackService.setPosition(position);
+        mPlaybackService.setSongUri(songsList.get(position).getSongUri());
+        mPlaybackService.setSongsList(songsList);
+        mPlaybackService.playSong();
 
         Intent nowPlayingIntent = new Intent(mContext, NowPlaying.class);
         startActivity(nowPlayingIntent);

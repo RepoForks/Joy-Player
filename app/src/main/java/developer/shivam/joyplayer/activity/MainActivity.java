@@ -26,28 +26,23 @@ import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.adapter.ViewPagerAdapter;
 import developer.shivam.joyplayer.fragment.TracksFragment;
 
-public class MainActivity extends AppCompatActivity {
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
-
-    @BindView(R.id.tabLayout)
-    TabLayout tabLayout;
-
-    @BindView(R.id.fab)
-    FloatingActionButton floatingActionButton;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Context mContext = MainActivity.this;
+    Toolbar toolbar;
+    ViewPager viewPager;
+    TabLayout tabLayout;
+    FloatingActionButton floatingActionButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        tabLayout = (TabLayout) findViewById(R.id.tabLayout);
+        floatingActionButton = (FloatingActionButton) findViewById(R.id.fab);
 
         setSupportActionBar(toolbar);
         setUpNavigationDrawer();
@@ -58,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
     }
 
-    @OnClick(R.id.fab)
     public void openNowPlaying() {
         Intent nowPlayingActivity = new Intent(this, NowPlaying.class);
         startActivity(nowPlayingActivity);
@@ -98,5 +92,12 @@ public class MainActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_main_menu, menu);
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.fab : openNowPlaying(); break;
+        }
     }
 }

@@ -13,11 +13,9 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -36,7 +34,7 @@ import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
-import developer.shivam.joyplayer.service.PlayerService;
+import developer.shivam.joyplayer.service.PlaybackService;
 import developer.shivam.joyplayer.util.Collector;
 import developer.shivam.joyplayer.util.HelperMethods;
 import developer.shivam.joyplayer.view.PlayPauseView;
@@ -77,7 +75,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @BindView(R.id.tvSongArtist)
     TextView tvSongArtist;
 
-    private PlayerService mPlayerService;
+    private PlaybackService mPlaybackService;
     private Context mContext = NowPlaying.this;
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
@@ -89,7 +87,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     protected void onResume() {
         super.onResume();
 
-        Intent playServiceIntent = new Intent(mContext, PlayerService.class);
+        Intent playServiceIntent = new Intent(mContext, PlaybackService.class);
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         nowPlayView.setAmplitude(1);
@@ -106,10 +104,10 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     private ServiceConnection mConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            PlayerService.PlayerBinder binder = (PlayerService.PlayerBinder) iBinder;
+            PlaybackService.PlayerBinder binder = (PlaybackService.PlayerBinder) iBinder;
             mBound = true;
-            mPlayerService = binder.getService();
-            updateView(mPlayerService);
+            mPlaybackService = binder.getService();
+            updateView(mPlaybackService);
             Log.d("NowPlaying", "Service bounded with " + songsList.size() + " songs");
         }
 
@@ -137,32 +135,32 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
         @Override
         public void run() {
-            seekBar.setProgress(mPlayerService.getPlayerPosition());
-            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlayerService.getPlayerPosition()));
+            seekBar.setProgress(mPlaybackService.getPlayerPosition());
+            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlaybackService.getPlayerPosition()));
             handler.postDelayed(this, 100);
         }
     }
 
-    private void updateView(PlayerService service) {
-        this.mPlayerService = service;
+    private void updateView(PlaybackService service) {
+        this.mPlaybackService = service;
 
         /**
-         * If this client is connected to mPlayerService then
+         * If this client is connected to mPlaybackService then
          *  only perform mediaPlayer operation
          */
-        if (mPlayerService != null) {
-            System.out.println(mPlayerService.getSongsList().size());
+        if (mPlaybackService != null) {
+            System.out.println(mPlaybackService.getSongsList().size());
             setCurrentSong();
-            mPlayerService.mPlayer.setOnCompletionListener(this);
+            mPlaybackService.mPlayer.setOnCompletionListener(this);
 
             handler.post(seekBarRunnable);
 
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    if (mPlayerService != null && fromUser) {
-                        mPlayerService.setPlayerPosition(progress);
-                        seekBar.setProgress(mPlayerService.getPlayerPosition());
+                    if (mPlaybackService != null && fromUser) {
+                        mPlaybackService.setPlayerPosition(progress);
+                        seekBar.setProgress(mPlaybackService.getPlayerPosition());
                     }
                 }
 
@@ -180,7 +178,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     }
 
     public void setCurrentSong() {
-        Songs track = mPlayerService.getSongsList().get(mPlayerService.getPosition());
+        Songs track = mPlaybackService.getSongsList().get(mPlaybackService.getPosition());
         tvTotalDuration.setText(HelperMethods.getSongDuration(Integer.parseInt(track.getDuration())));
         Uri albumArtUri = Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()));
         Picasso.with(mContext).load(albumArtUri).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
@@ -243,7 +241,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @OnClick(R.id.btnPlayPause)
     public void playPause() {
         isPlaying = !isPlaying;
-        mPlayerService.playPause();
+        mPlaybackService.playPause();
         if (isPlaying) {
             btnPlayPause.toggle();
             nowPlayView.start();
@@ -258,13 +256,13 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
     @OnClick(R.id.ivPrevious)
     public void playPreviousSong() {
-        mPlayerService.playPrevious();
+        mPlaybackService.playPrevious();
         setCurrentSong();
     }
 
     @OnClick(R.id.ivNext)
     public void playNextSong() {
-        mPlayerService.playNext();
+        mPlaybackService.playNext();
         setCurrentSong();
     }
 
