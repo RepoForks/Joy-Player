@@ -80,7 +80,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
     Handler handler;
-    SeekBarRunnable seekBarRunnable;
     boolean isPlaying = true;
     SeekBarRunnable seekBarRunnable;
 
@@ -88,8 +87,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
         @Override
         public void run() {
-            seekBar.setProgress(mPlayerService.getPlayerPosition());
-            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlayerService.getPlayerPosition()));
+            seekBar.setProgress(mPlaybackService.getPlayerPosition());
+            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlaybackService.getPlayerPosition()));
             handler.postDelayed(this, 100);
         }
     }
@@ -98,12 +97,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     protected void onResume() {
         super.onResume();
 
-<<<<<<< HEAD
         Intent playServiceIntent = new Intent(mContext, PlaybackService.class);
-=======
-        Intent playServiceIntent = new Intent(mContext, PlayerService.class);
-        startService(playServiceIntent);
->>>>>>> 009b09b754b750a6e2cee5368669de09332d8931
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
 
         nowPlayView.setAmplitude(1);
@@ -147,16 +141,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         }
     }
 
-    private class SeekBarRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            seekBar.setProgress(mPlaybackService.getPlayerPosition());
-            tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlaybackService.getPlayerPosition()));
-            handler.postDelayed(this, 100);
-        }
-    }
-
     private void updateView(PlaybackService service) {
         this.mPlaybackService = service;
 
@@ -168,14 +152,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             System.out.println(mPlaybackService.getSongsList().size());
             setCurrentSong();
             mPlaybackService.mPlayer.setOnCompletionListener(this);
-
-<<<<<<< HEAD
-            seekBarRunnable = new SeekBarRunnable();
-
-            handler = new Handler();
-=======
->>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
-            handler.post(seekBarRunnable);
 
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -305,12 +281,12 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home : onBackPressed();
+            case android.R.id.home:
+                onBackPressed();
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
-<<<<<<< HEAD
 
     @Override
     public void onDestroy() {
@@ -320,6 +296,4 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             //mContext.unbindService(mConnection);
         }
     }
-=======
->>>>>>> 5d6bb2802e06780631978a91bc2abfd1430810b4
 }
