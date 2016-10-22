@@ -88,6 +88,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     private ImageView bubbleImageView;
     private Notification mNotification;
     private Notification.Builder notificationBuilder;
+    private NotificationManager notificationManager;
 
     public class PlayerBinder extends Binder {
         public PlaybackService getService() {
@@ -136,11 +137,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         notificationBuilder = new Notification.Builder(getApplicationContext());
     }
 
-    @Override
-    public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_STICKY;
-    }
-
     private void initPlayer() {
         mPlayer.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
         mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -164,7 +160,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     @Override
     public void onCompletion(MediaPlayer mp) {
         if (isRunningInBackground) {
-            Log.d(TAG, "Songs playing completed");
             if (position < songsList.size() - 1) {
                 position += 1;
                 setPlayerPosition(0);
@@ -177,6 +172,12 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 playSong();
             }
         }
+        updateNotification(songsList.get(position).getName());
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -196,7 +197,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             e.printStackTrace();
         }
         mPlayer.prepareAsync();
-
         showNotification();
     }
 
@@ -208,6 +208,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         if (playerState == State.PLAY) {
             playerState = State.PAUSE;
             mPlayer.pause();
+            mNotification = notificationBuilder.setAutoCancel(true).setOngoing(false).build();
+            notificationManager.notify(1, mNotification);
         } else if (playerState == State.PAUSE) {
             playerState = State.PLAY;
             mPlayer.start();
@@ -246,9 +248,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);
                 setSongUri(songsList.get(position).getSongUri());
+                playSong();
             } else {
                 setPosition(songsList.size() - 1);
                 setSongUri(songsList.get(position).getSongUri());
+                playSong();
             }
         }
     }
@@ -276,9 +280,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);
                 setSongUri(songsList.get(position).getSongUri());
+                playSong();
             } else {
                 setPosition(songsList.size() - 1);
                 setSongUri(songsList.get(position).getSongUri());
+                playSong();
             }
         }
     }
@@ -326,8 +332,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
      */
     @Override
     public boolean onUnbind(Intent intent) {
-        mPlayer.stop();
-        mPlayer.release();
         return super.onUnbind(intent);
     }
 
@@ -335,14 +339,20 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     public void onDestroy() {
         super.onDestroy();
 
+        mPlayer.stop();
+        mPlayer.release();
+
+
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
+
+        //stopForeground(true);
     }
 
     public void showNotification() {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_media);
         notificationView.setImageViewUri(R.id.ivAlbumArt, Collector.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
         notificationView.setTextViewText(R.id.notify_song_name, songsList.get(position).getName());
@@ -351,9 +361,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true)
                 .setWhen(System.currentTimeMillis())
                 .setContent(notificationView)
+                .setOngoing(true)
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
-        notificationManager.notify(200, mNotification);
+
+        notificationManager.notify(1, mNotification);
     }
 
     private void updateNotification(String songName) {

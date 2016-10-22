@@ -67,7 +67,8 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(songHolder.ivAlbumArt);
         } else if (holder instanceof AdHolder) {
             AdHolder adHolder = (AdHolder) holder;
-            adHolder.adView.loadAd(new AdRequest.Builder().build());
+            //adHolder.adView.loadAd(new AdRequest.Builder().build());
+            adHolder.adView.loadAd(new AdRequest.Builder().addTestDevice("C506057DBAF31FD9D2D08AE17D432321").build());
         }
     }
 

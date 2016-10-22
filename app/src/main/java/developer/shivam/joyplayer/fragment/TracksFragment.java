@@ -98,6 +98,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     public void onResume() {
         super.onResume();
         Intent playerServiceIntent = new Intent(mContext, PlaybackService.class);
+        mContext.startService(playerServiceIntent);
         if (!mBound) {
             mContext.bindService(playerServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
         }

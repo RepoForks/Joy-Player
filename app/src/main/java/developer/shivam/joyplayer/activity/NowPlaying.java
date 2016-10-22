@@ -269,7 +269,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         super.onPause();
         handler.removeCallbacks(seekBarRunnable);
         if (mBound) {
-            //unbindService(mConnection);
+            unbindService(mConnection);
         }
     }
 
@@ -286,14 +286,5 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        handler.removeCallbacks(seekBarRunnable);
-        if (mBound) {
-            //mContext.unbindService(mConnection);
-        }
     }
 }
