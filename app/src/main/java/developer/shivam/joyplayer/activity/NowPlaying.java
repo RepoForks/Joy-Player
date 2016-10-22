@@ -35,7 +35,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlaybackService;
-import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.HelperMethods;
 import developer.shivam.joyplayer.view.PlayPauseView;
 import developer.shivam.library.WaveView;
@@ -80,7 +80,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
     Handler handler;
-    boolean isPlaying = true;
+    boolean isPlaying = false;
     SeekBarRunnable seekBarRunnable;
 
     public class SeekBarRunnable implements Runnable {
@@ -178,7 +178,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     public void setCurrentSong() {
         Songs track = mPlaybackService.getSongsList().get(mPlaybackService.getPosition());
         tvTotalDuration.setText(HelperMethods.getSongDuration(Integer.parseInt(track.getDuration())));
-        Uri albumArtUri = Collector.getAlbumArtUri(Long.parseLong(track.getAlbumId()));
+        Uri albumArtUri = Retriever.getAlbumArtUri(Long.parseLong(track.getAlbumId()));
         Picasso.with(mContext).load(albumArtUri).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
         ivAlbumArt.setAlpha(0.9f);
@@ -265,8 +265,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
+    protected void onDestroy() {
+        super.onDestroy();
         handler.removeCallbacks(seekBarRunnable);
         if (mBound) {
             unbindService(mConnection);

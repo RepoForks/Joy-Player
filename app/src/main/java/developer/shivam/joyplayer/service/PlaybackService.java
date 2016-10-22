@@ -31,7 +31,7 @@ import java.util.List;
 
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
-import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.State;
 
 /**
@@ -171,8 +171,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 setSongUri(songsList.get(position).getSongUri());
                 playSong();
             }
+            updateNotification(songsList.get(position).getName());
         }
-        updateNotification(songsList.get(position).getName());
     }
 
     @Override
@@ -197,6 +197,18 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             e.printStackTrace();
         }
         mPlayer.prepareAsync();
+        showNotification();
+    }
+
+    public void prepareSong() {
+        mPlayer.reset();
+        playerState = State.PAUSE;
+        try {
+            mPlayer.setDataSource(mContext, getSongUri());
+        } catch (IOException e) {
+            Log.d(TAG, "Error playing in media content");
+            e.printStackTrace();
+        }
         showNotification();
     }
 
@@ -248,11 +260,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                prepareSong();
             } else {
                 setPosition(songsList.size() - 1);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                prepareSong();
             }
         }
     }
@@ -280,11 +292,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                prepareSong();
             } else {
                 setPosition(songsList.size() - 1);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                prepareSong();
             }
         }
     }
@@ -354,7 +366,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     public void showNotification() {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_media);
-        notificationView.setImageViewUri(R.id.ivAlbumArt, Collector.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
+        notificationView.setImageViewUri(R.id.ivAlbumArt, Retriever.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
         notificationView.setTextViewText(R.id.notify_song_name, songsList.get(position).getName());
 
         mNotification = notificationBuilder

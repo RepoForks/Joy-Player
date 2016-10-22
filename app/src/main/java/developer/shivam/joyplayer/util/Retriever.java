@@ -17,7 +17,7 @@ import java.util.List;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.model.Songs;
 
-public class Collector {
+public class Retriever {
 
     private static ContentResolver resolver;
 

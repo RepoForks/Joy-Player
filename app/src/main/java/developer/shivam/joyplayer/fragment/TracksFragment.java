@@ -32,7 +32,7 @@ import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.listener.onPermissionListener;
 import developer.shivam.joyplayer.model.Songs;
 import developer.shivam.joyplayer.service.PlaybackService;
-import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.PermissionManager;
 
 public class TracksFragment extends Fragment implements onPermissionListener, OnClickListener {
@@ -89,7 +89,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
                     .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
 
         } else {
-            songsList = Collector.getSongs(mContext);
+            songsList = Retriever.getSongs(mContext);
             setUpRecyclerView(songsList);
         }
     }
@@ -124,7 +124,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             spacing.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.horizontal_card_margin), LinearLayout.LayoutParams.MATCH_PARENT));
 
             ((TextView) view.findViewById(R.id.tvSongName)).setText(songsList.get(i).getName());
-            Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(songsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
+            Picasso.with(mContext).load(Retriever.getAlbumArtUri(Long.parseLong(songsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
 
             linearLayoutRecentlyAddedItem.addView(spacing);
             linearLayoutRecentlyAddedItem.addView(view);
@@ -137,7 +137,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
 
     @Override
     public void onPermissionGranted() {
-        songsList = Collector.getSongs(mContext);
+        songsList = Retriever.getSongs(mContext);
         setUpRecyclerView(songsList);
     }
 

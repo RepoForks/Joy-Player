@@ -16,10 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import developer.shivam.joyplayer.R;
-import developer.shivam.joyplayer.activity.MainActivity;
 import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.model.Songs;
-import developer.shivam.joyplayer.util.Collector;
+import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.ConnectionDetector;
 import developer.shivam.joyplayer.util.HelperMethods;
 
@@ -64,7 +63,7 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ViewHolder songHolder = (ViewHolder) holder;
             songHolder.tvSongName.setText(mSongsList.get(position).getName());
             songHolder.tvSingerName.setText(mSongsList.get(position).getSingerName() + " · " + HelperMethods.getSongDuration(Integer.valueOf(mSongsList.get(position).getDuration())));
-            Picasso.with(mContext).load(Collector.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(songHolder.ivAlbumArt);
+            Picasso.with(mContext).load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(songHolder.ivAlbumArt);
         } else if (holder instanceof AdHolder) {
             AdHolder adHolder = (AdHolder) holder;
             //adHolder.adView.loadAd(new AdRequest.Builder().build());
