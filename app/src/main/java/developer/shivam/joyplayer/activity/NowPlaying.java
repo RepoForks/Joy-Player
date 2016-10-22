@@ -33,7 +33,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
-import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.service.PlaybackService;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.HelperMethods;
@@ -139,6 +139,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        handler.post(seekBarRunnable);
     }
 
     private void updateView(PlaybackService service) {

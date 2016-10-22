@@ -4,7 +4,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.pojo.Songs;
 
 public class Sorter {
 

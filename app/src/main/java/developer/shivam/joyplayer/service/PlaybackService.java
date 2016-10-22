@@ -22,7 +22,6 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.RemoteViews;
 
 import java.io.IOException;
@@ -30,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import developer.shivam.joyplayer.R;
-import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.State;
 
@@ -85,7 +84,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     /**
      * bubbleImageView is the view which will be added to the view
      */
-    private ImageView bubbleImageView;
     private Notification mNotification;
     private Notification.Builder notificationBuilder;
     private NotificationManager notificationManager;
@@ -171,13 +169,13 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 setSongUri(songsList.get(position).getSongUri());
                 playSong();
             }
-            updateNotification(songsList.get(position).getName());
+
         }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override
@@ -209,7 +207,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             Log.d(TAG, "Error playing in media content");
             e.printStackTrace();
         }
-        showNotification();
+        //showNotification();
     }
 
     /**
@@ -331,6 +329,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     public void setPosition(int position) {
         this.position = position;
+        setSongUri(songsList.get(position).getSongUri());
     }
 
     public int getPosition() {
@@ -359,8 +358,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
         }
-
-        //stopForeground(true);
     }
 
     public void showNotification() {
@@ -383,6 +380,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     private void updateNotification(String songName) {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotification.contentView.setTextViewText(R.id.notify_song_name, songName);
-        notificationManager.notify(200, mNotification);
+        notificationManager.notify(1, mNotification);
     }
 }

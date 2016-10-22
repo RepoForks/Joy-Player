@@ -1,4 +1,4 @@
-package developer.shivam.joyplayer.model;
+package developer.shivam.joyplayer.pojo;
 
 import android.net.Uri;
 

@@ -17,7 +17,7 @@ import java.util.List;
 
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.listener.OnClickListener;
-import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.ConnectionDetector;
 import developer.shivam.joyplayer.util.HelperMethods;

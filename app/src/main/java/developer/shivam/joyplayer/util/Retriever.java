@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import developer.shivam.joyplayer.R;
-import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.pojo.Songs;
 
 public class Retriever {
 

@@ -30,17 +30,30 @@ import developer.shivam.joyplayer.activity.NowPlaying;
 import developer.shivam.joyplayer.adapter.SongsAdapter;
 import developer.shivam.joyplayer.listener.OnClickListener;
 import developer.shivam.joyplayer.listener.onPermissionListener;
-import developer.shivam.joyplayer.model.Songs;
+import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.service.PlaybackService;
+import developer.shivam.joyplayer.util.Global;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.PermissionManager;
 
 public class TracksFragment extends Fragment implements onPermissionListener, OnClickListener {
 
+    /**
+     * This is the tag used to log events.
+     */
     final String TAG = "TRACKS_FRAGMENT";
+
     Context mContext;
-    List<Songs> songsList = new ArrayList<>();
+
+    List<Songs> mSongsList = new ArrayList<>();
+
     RecyclerView rvSongsList;
+
+    /**
+     * Once list retrieved from storage will stored in
+     *  this global variable.
+     */
+    Global globalVariable;
 
     private boolean mBound = false;
 
@@ -56,6 +69,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
              */
             PlaybackService.PlayerBinder binder = (PlaybackService.PlayerBinder) service;
             mPlaybackService = binder.getService();
+            mPlaybackService.setSongsList(mSongsList);
             mBound = true;
             Log.d(TAG, "Connection made to Player Service");
         }
@@ -83,20 +97,17 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     public void onStart() {
         super.onStart();
         mContext = getActivity();
+        globalVariable = (Global) mContext.getApplicationContext();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PermissionManager.with(getActivity())
                     .setPermissionListener(this)
                     .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
 
         } else {
-            songsList = Retriever.getSongs(mContext);
-            setUpRecyclerView(songsList);
+            mSongsList = Retriever.getSongs(mContext);
+            globalVariable.setSongsList(mSongsList);
+            setUpRecyclerView(mSongsList);
         }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
         Intent playerServiceIntent = new Intent(mContext, PlaybackService.class);
         mContext.startService(playerServiceIntent);
         if (!mBound) {
@@ -123,8 +134,8 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             View spacing = new View(mContext);
             spacing.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.horizontal_card_margin), LinearLayout.LayoutParams.MATCH_PARENT));
 
-            ((TextView) view.findViewById(R.id.tvSongName)).setText(songsList.get(i).getName());
-            Picasso.with(mContext).load(Retriever.getAlbumArtUri(Long.parseLong(songsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
+            ((TextView) view.findViewById(R.id.tvSongName)).setText(mSongsList.get(i).getName());
+            Picasso.with(mContext).load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
 
             linearLayoutRecentlyAddedItem.addView(spacing);
             linearLayoutRecentlyAddedItem.addView(view);
@@ -137,8 +148,9 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
 
     @Override
     public void onPermissionGranted() {
-        songsList = Retriever.getSongs(mContext);
-        setUpRecyclerView(songsList);
+        mSongsList = Retriever.getSongs(mContext);
+        globalVariable.setSongsList(mSongsList);
+        setUpRecyclerView(mSongsList);
     }
 
     @Override
@@ -148,10 +160,8 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
 
     @Override
     public void onClick(View view, int position) {
-
         mPlaybackService.setPosition(position);
-        mPlaybackService.setSongUri(songsList.get(position).getSongUri());
-        mPlaybackService.setSongsList(songsList);
+        mPlaybackService.setSongsList(mSongsList);
         mPlaybackService.playSong();
 
         Intent nowPlayingIntent = new Intent(mContext, NowPlaying.class);
