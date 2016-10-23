@@ -108,6 +108,12 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             globalVariable.setSongsList(mSongsList);
             setUpRecyclerView(mSongsList);
         }
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         Intent playerServiceIntent = new Intent(mContext, PlaybackService.class);
         mContext.startService(playerServiceIntent);
         if (!mBound) {
@@ -171,12 +177,8 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     @Override
     public void onPause() {
         super.onPause();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         if (mBound) {
+            mBound = false;
             mContext.unbindService(mConnection);
         }
     }

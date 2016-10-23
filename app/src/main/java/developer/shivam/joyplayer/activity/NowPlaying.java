@@ -80,7 +80,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     private boolean mBound = false;
     List<Songs> songsList = new ArrayList<>();
     Handler handler;
-    boolean isPlaying = false;
+    boolean isPlaying = true;
     SeekBarRunnable seekBarRunnable;
 
     public class SeekBarRunnable implements Runnable {
@@ -109,6 +109,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
         handler = new Handler();
         seekBarRunnable = new SeekBarRunnable();
+        handler.post(seekBarRunnable);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -139,8 +140,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        handler.post(seekBarRunnable);
     }
 
     private void updateView(PlaybackService service) {
@@ -246,11 +245,9 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             btnPlayPause.toggle();
             nowPlayView.start();
 
-
         } else {
             btnPlayPause.toggle();
             nowPlayView.stop();
-
         }
     }
 
@@ -267,8 +264,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
         handler.removeCallbacks(seekBarRunnable);
         if (mBound) {
             unbindService(mConnection);

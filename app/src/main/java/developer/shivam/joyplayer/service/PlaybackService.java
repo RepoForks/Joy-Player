@@ -375,6 +375,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .build();
 
         notificationManager.notify(1, mNotification);
+        startForeground(1, mNotification);
     }
 
     private void updateNotification(String songName) {
