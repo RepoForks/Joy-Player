@@ -17,6 +17,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.telephony.PhoneStateListener;
@@ -61,6 +62,23 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     private List<Songs> songsList = new ArrayList<>();
 
     public boolean isRunningInBackground = false;
+
+    Handler serviceHandler;
+    long timeStamp = 0;
+    private ServiceRunnable serviceRunnable;
+    final int NOTIFICATION_ID = 200;
+
+    private class ServiceRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            if (System.currentTimeMillis() - timeStamp > 1000) {
+                timeStamp = System.currentTimeMillis();
+                System.out.println("I'm running");
+            }
+            serviceHandler.post(this);
+        }
+    }
 
     /**
      * In a bound service binder is used to bind service
@@ -111,6 +129,10 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         mPlayer.setOnErrorListener(this);
         mPlayer.setOnCompletionListener(this);
 
+        serviceRunnable = new ServiceRunnable();
+        serviceHandler = new Handler();
+        serviceHandler.post(serviceRunnable);
+
         /**
          * Here we will register the PHONE_STATE_LISTENER
          *  to pause/play songs according to the phone state
@@ -158,7 +180,10 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
          * When media player is prepared asynchronously
          *  mediaPlayer.start is called to start song.
          */
-        mp.start();
+        if (playerState == State.PAUSE)
+            mp.pause();
+        else
+            mp.start();
     }
 
     @Override
@@ -168,12 +193,12 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 position += 1;
                 setPlayerPosition(0);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                playSong(State.PLAY);
             } else {
                 position = 0;
                 setPlayerPosition(0);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                playSong(State.PLAY);
             }
 
         }
@@ -194,9 +219,9 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         return false;
     }
 
-    public void playSong() {
+    public void playSong(int state) {
         mPlayer.reset();
-        playerState = State.PLAY;
+        playerState = state;
         try {
             mPlayer.setDataSource(mContext, getSongUri());
         } catch (IOException e) {
@@ -212,17 +237,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         showNotification();
     }
 
-    public void prepareSong() {
-        mPlayer.reset();
-        playerState = State.PAUSE;
-        try {
-            mPlayer.setDataSource(mContext, getSongUri());
-        } catch (IOException e) {
-            Log.d(TAG, "Error playing in media content");
-            e.printStackTrace();
-        }
-    }
-
     /**
      * This method play/pause the media content
      *  on the basis of playerState
@@ -231,9 +245,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         if (playerState == State.PLAY) {
             playerState = State.PAUSE;
             mPlayer.pause();
+            stopForeground(true);
             mNotification = notificationBuilder.setAutoCancel(true).setOngoing(false).build();
-            notificationManager.notify(1, mNotification);
+            notificationManager.notify(NOTIFICATION_ID, mNotification);
         } else if (playerState == State.PAUSE) {
+            showNotification();
             playerState = State.PLAY;
             mPlayer.start();
         }
@@ -250,7 +266,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
              *  then the current playing song will restart else the
              *  previous song in the list will play
              */
-            if (getPlayerPosition() > 1000) {
+            if (getPlayerPosition() < 1000) {
                 mPlayer.pause();
                 setPlayerPosition(0);
                 mPlayer.start();
@@ -259,11 +275,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 if (getPosition() != 0) {
                     setPosition(getPosition() - 1);
                     setSongUri(songsList.get(position).getSongUri());
-                    playSong();
+                    playSong(State.PLAY);
                 } else {
                     setPosition(songsList.size() - 1);
                     setSongUri(songsList.get(position).getSongUri());
-                    playSong();
+                    playSong(State.PLAY);
                 }
             }
         } else if (playerState == State.PAUSE) {
@@ -271,11 +287,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (getPosition() != 0) {
                 setPosition(getPosition() - 1);
                 setSongUri(songsList.get(position).getSongUri());
-                prepareSong();
+                playSong(State.PAUSE);
             } else {
                 setPosition(songsList.size() - 1);
                 setSongUri(songsList.get(position).getSongUri());
-                prepareSong();
+                playSong(State.PAUSE);
             }
         }
     }
@@ -292,22 +308,22 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (getPosition() != (songsList.size() - 1)) {
                 setPosition(getPosition() + 1);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                playSong(State.PLAY);
             } else {
                 setPosition(0);
                 setSongUri(songsList.get(position).getSongUri());
-                playSong();
+                playSong(State.PLAY);
             }
         } else if (playerState == State.PAUSE) {
             setPlayerPosition(0);
-            if (getPosition() != 0) {
-                setPosition(getPosition() - 1);
+            if (getPosition() != (songsList.size() - 1)) {
+                setPosition(getPosition() + 1);
                 setSongUri(songsList.get(position).getSongUri());
-                prepareSong();
+                playSong(State.PAUSE);
             } else {
-                setPosition(songsList.size() - 1);
+                setPosition(0);
                 setSongUri(songsList.get(position).getSongUri());
-                prepareSong();
+                playSong(State.PAUSE);
             }
         }
     }
@@ -365,6 +381,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         mPlayer.stop();
         mPlayer.release();
 
+        serviceHandler.removeCallbacks(serviceRunnable);
+
         /**
          * Un-Linking the phoneStateListener that was used to pause the
          *  song when phone rings.
@@ -389,19 +407,14 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
         mNotification = notificationBuilder
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true)
+                .setSmallIcon(R.mipmap.ic_launcher)
+                .setOngoing(true)
                 .setWhen(System.currentTimeMillis())
                 .setContent(notificationView)
                 .setOngoing(true)
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
 
-        startForeground(1, mNotification);
-    }
-
-    private void updateNotification(String songName) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotification.contentView.setTextViewText(R.id.notify_song_name, songName);
-        notificationManager.notify(1, mNotification);
+        startForeground(NOTIFICATION_ID, mNotification);
     }
 }

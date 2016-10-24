@@ -35,6 +35,7 @@ import developer.shivam.joyplayer.service.PlaybackService;
 import developer.shivam.joyplayer.util.Global;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.PermissionManager;
+import developer.shivam.joyplayer.util.State;
 
 public class TracksFragment extends Fragment implements onPermissionListener, OnClickListener {
 
@@ -168,7 +169,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     public void onClick(View view, int position) {
         mPlaybackService.setPosition(position);
         mPlaybackService.setSongsList(mSongsList);
-        mPlaybackService.playSong();
+        mPlaybackService.playSong(State.PLAY);
 
         Intent nowPlayingIntent = new Intent(mContext, NowPlaying.class);
         startActivity(nowPlayingIntent);
