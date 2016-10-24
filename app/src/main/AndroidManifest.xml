@@ -26,7 +26,16 @@
         </activity>
         <activity android:name=".activity.NowPlaying" />
 
-        <service android:name=".service.PlaybackService" />
+        <service android:name=".service.PlaybackService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="developer.shivam.joyplayer.action.PLAY" />
+                <action android:name="developer.shivam.joyplayer.action.PAUSE" />
+                <action android:name="developer.shivam.joyplayer.action.NEXT" />
+                <action android:name="developer.shivam.joyplayer.action.PREVIOUS" />
+
+            </intent-filter>
+        </service>
 
     </application>
 

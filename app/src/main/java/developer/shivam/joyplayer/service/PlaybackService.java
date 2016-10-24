@@ -63,9 +63,34 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     public boolean isRunningInBackground = false;
 
+    /**
+     * Play, pause, next and previous song.
+     * Intent action to control song playback from notification
+     *  button.
+     */
+    public static final String ACTION_PLAY = "developer.shivam.joyplayer.action.PLAY";
+    public static final String ACTION_PAUSE = "developer.shivam.joyplayer.action.PAUSE";
+    public static final String ACTION_NEXT = "developer.shivam.joyplayer.action.NEXT";
+    public static final String ACTION_PREVIOUS = "developer.shivam.joyplayer.action.PREVIOUS";
+
+    /**
+     * serviceHandler is used to print log in logcat after
+     *  every second to say - I'm running on the service behalf
+     */
     Handler serviceHandler;
+
+    /**
+     * timeStamp used to record the current time in millis
+     */
     long timeStamp = 0;
+
     private ServiceRunnable serviceRunnable;
+
+    /**
+     * NOTIFICATION_ID is the common notification id
+     *  used to display current running song name in status bar
+     *  and to set service running in foreground.
+     */
     final int NOTIFICATION_ID = 200;
 
     private class ServiceRunnable implements Runnable {
@@ -206,6 +231,26 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        try {
+            String action = intent.getAction();
+            switch (intent.getAction()) {
+                case ACTION_PLAY:
+                    playPause();
+                    break;
+                case ACTION_PAUSE:
+                    playPause();
+                    break;
+                case ACTION_NEXT:
+                    playNext();
+                    break;
+                case ACTION_PREVIOUS:
+                    playPrevious();
+                    break;
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
         /**
          * START_STICKY means that system will try to restart the service when
          *  its force-closed.
@@ -415,6 +460,13 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
 
+        Intent playPauseIntent = new Intent(ACTION_PLAY);
+        PendingIntent playPausePendingIntent = PendingIntent.getActivity(this,
+                100,
+                playPauseIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationView.setOnClickPendingIntent(R.id.btnPlayPause, playPausePendingIntent);
         startForeground(NOTIFICATION_ID, mNotification);
     }
 }
