@@ -109,7 +109,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
 
         handler = new Handler();
         seekBarRunnable = new SeekBarRunnable();
-        handler.post(seekBarRunnable);
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
@@ -150,7 +149,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
          *  only perform mediaPlayer operation
          */
         if (mPlaybackService != null) {
-            System.out.println(mPlaybackService.getSongsList().size());
+            handler.post(seekBarRunnable);
             setCurrentSong();
             mPlaybackService.mPlayer.setOnCompletionListener(this);
 

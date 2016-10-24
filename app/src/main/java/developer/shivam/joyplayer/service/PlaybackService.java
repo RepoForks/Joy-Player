@@ -9,6 +9,7 @@ package developer.shivam.joyplayer.service;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import developer.shivam.joyplayer.R;
+import developer.shivam.joyplayer.activity.NowPlaying;
 import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.State;
@@ -152,6 +154,10 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+        /**
+         * When media player is prepared asynchronously
+         *  mediaPlayer.start is called to start song.
+         */
         mp.start();
     }
 
@@ -175,6 +181,10 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        /**
+         * START_STICKY means that system will try to restart the service when
+         *  its force-closed.
+         */
         return START_STICKY;
     }
 
@@ -185,7 +195,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     }
 
     public void playSong() {
-        mPlayer.start();
         mPlayer.reset();
         playerState = State.PLAY;
         try {
@@ -194,6 +203,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             Log.d(TAG, "Error playing in media content");
             e.printStackTrace();
         }
+        /**
+         * prepareAsync() will asynchronously prepare the media player
+         *  and when its prepared it will call the onPrepared method in which we
+         *  will call the mediaPlayer.start() to start the media playing
+         */
         mPlayer.prepareAsync();
         showNotification();
     }
@@ -207,7 +221,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             Log.d(TAG, "Error playing in media content");
             e.printStackTrace();
         }
-        //showNotification();
     }
 
     /**
@@ -316,7 +329,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     public void setSongsList(List<Songs> songsList) {
         this.songsList = songsList;
-        Log.d("Songs list size", String.valueOf(this.songsList.size()));
     }
 
     private Uri getSongUri() {
@@ -353,7 +365,10 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         mPlayer.stop();
         mPlayer.release();
 
-
+        /**
+         * Un-Linking the phoneStateListener that was used to pause the
+         *  song when phone rings.
+         */
         TelephonyManager mTelephonyManager = (TelephonyManager) getSystemService(TELEPHONY_SERVICE);
         if (mTelephonyManager != null) {
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
@@ -366,7 +381,14 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         notificationView.setImageViewUri(R.id.ivAlbumArt, Retriever.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
         notificationView.setTextViewText(R.id.notify_song_name, songsList.get(position).getName());
 
+        Intent intent = new Intent(this, NowPlaying.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                100,
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
         mNotification = notificationBuilder
+                .setContentIntent(pendingIntent)
                 .setSmallIcon(R.mipmap.ic_launcher).setOngoing(true)
                 .setWhen(System.currentTimeMillis())
                 .setContent(notificationView)
@@ -374,7 +396,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
 
-        notificationManager.notify(1, mNotification);
         startForeground(1, mNotification);
     }
 
