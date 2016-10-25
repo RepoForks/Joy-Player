@@ -460,13 +460,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
 
-        Intent playPauseIntent = new Intent(ACTION_PLAY);
-        PendingIntent playPausePendingIntent = PendingIntent.getActivity(this,
-                100,
-                playPauseIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notificationView.setOnClickPendingIntent(R.id.btnPlayPause, playPausePendingIntent);
         startForeground(NOTIFICATION_ID, mNotification);
     }
 }
