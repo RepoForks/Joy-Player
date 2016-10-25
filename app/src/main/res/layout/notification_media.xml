@@ -10,8 +10,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_alignParentLeft="true"
-        android:layout_centerVertical="true"
-        android:src="@drawable/default_album_art" />
+        android:layout_centerVertical="true"/>
 
     <TextView
         android:id="@+id/notify_song_name"
@@ -24,9 +23,10 @@
         android:layout_marginRight="10dp"
         android:lines="1"
         android:layout_toRightOf="@id/ivAlbumArt"
+        android:layout_toLeftOf="@+id/ivStopService"
         android:textColor="#ffffff" />
 
-    <ImageView android:id="@+id/stopService"
+    <ImageView android:id="@+id/ivStopService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

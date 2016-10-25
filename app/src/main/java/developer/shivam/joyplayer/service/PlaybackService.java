@@ -38,9 +38,9 @@ import developer.shivam.joyplayer.util.State;
 
 /**
  * A bound service that serves playing music in background
- *  Its life is same of the application ie. start with the launch
- *  of application and ends with the onDestroy(). It will not run
- *  indefinitely in the background
+ * Its life is same of the application ie. start with the launch
+ * of application and ends with the onDestroy(). It will not run
+ * indefinitely in the background
  */
 public class PlaybackService extends Service implements MediaPlayer.OnPreparedListener,
         MediaPlayer.OnErrorListener,
@@ -51,7 +51,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * mPlayer is a media player object used to perform
-     *  basic MediaPlayer functionality
+     * basic MediaPlayer functionality
      */
     public MediaPlayer mPlayer = null;
 
@@ -66,16 +66,17 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     /**
      * Play, pause, next and previous song.
      * Intent action to control song playback from notification
-     *  button.
+     * button.
      */
     public static final String ACTION_PLAY = "developer.shivam.joyplayer.action.PLAY";
     public static final String ACTION_PAUSE = "developer.shivam.joyplayer.action.PAUSE";
     public static final String ACTION_NEXT = "developer.shivam.joyplayer.action.NEXT";
     public static final String ACTION_PREVIOUS = "developer.shivam.joyplayer.action.PREVIOUS";
+    public static final String ACTION_STOP_SERVICE = "developer.shivam.joyplayer.action.STOP_SERVICE";
 
     /**
      * serviceHandler is used to print log in logcat after
-     *  every second to say - I'm running on the service behalf
+     * every second to say - I'm running on the service behalf
      */
     Handler serviceHandler;
 
@@ -88,8 +89,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * NOTIFICATION_ID is the common notification id
-     *  used to display current running song name in status bar
-     *  and to set service running in foreground.
+     * used to display current running song name in status bar
+     * and to set service running in foreground.
      */
     final int NOTIFICATION_ID = 200;
 
@@ -107,13 +108,13 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * In a bound service binder is used to bind service
-     *  with clients
+     * with clients
      */
     private IBinder mBinder = new PlayerBinder();
 
     /**
      * position is used to keep track on
-     *  song at which position is playing
+     * song at which position is playing
      */
     private int position;
 
@@ -121,8 +122,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * Window manager is user to add view above all view
-     *  In this app the bubbleView is used for giving
-     *  shortcut options
+     * In this app the bubbleView is used for giving
+     * shortcut options
      */
     private WindowManager mWindowManager;
 
@@ -142,7 +143,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * onCreate() is the first method in the service
-     *  lifecycle to be called. We will initialize the mediaPlayer here
+     * lifecycle to be called. We will initialize the mediaPlayer here
      */
     @Override
     public void onCreate() {
@@ -191,8 +192,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * onBind() method is to be imported in a Bound Service
-     *  which return the IBinder object so that client (such as Activities)
-     *  can interact.
+     * which return the IBinder object so that client (such as Activities)
+     * can interact.
      */
     @Override
     public IBinder onBind(Intent intent) {
@@ -231,24 +232,30 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        try {
+
+        if (intent != null) {
             String action = intent.getAction();
-            switch (intent.getAction()) {
-                case ACTION_PLAY:
-                    playPause();
-                    break;
-                case ACTION_PAUSE:
-                    playPause();
-                    break;
-                case ACTION_NEXT:
-                    playNext();
-                    break;
-                case ACTION_PREVIOUS:
-                    playPrevious();
-                    break;
+            if (action != null) {
+                switch (action) {
+                    case ACTION_PLAY:
+                        playPause();
+                        break;
+                    case ACTION_PAUSE:
+                        playPause();
+                        break;
+                    case ACTION_NEXT:
+                        playNext();
+                        break;
+                    case ACTION_PREVIOUS:
+                        playPrevious();
+                        break;
+                    case ACTION_STOP_SERVICE:
+                        System.out.println("Called");
+                        Intent intent1 = new Intent(this, PlaybackService.class);
+                        stopService(intent1);
+                        break;
+                }
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
 
         /**
@@ -284,7 +291,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * This method play/pause the media content
-     *  on the basis of playerState
+     * on the basis of playerState
      */
     public void playPause() {
         if (playerState == State.PLAY) {
@@ -302,7 +309,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * This method is used to play the previous song
-     *  if present in the list
+     * if present in the list
      */
     public void playPrevious() {
         if (playerState == State.PLAY) {
@@ -343,9 +350,9 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * This method is used to play the next song
-     *  in the list but id the last song of the list is
-     *  playing then on clicking this button first song will
-     *  be played.
+     * in the list but id the last song of the list is
+     * playing then on clicking this button first song will
+     * be played.
      */
     public void playNext() {
         if (playerState == State.PLAY) {
@@ -411,8 +418,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     /**
      * When clients unbind the service onUnbind of Service
-     *  class is called. In this case we will stop
-     *  the media player and then release it.
+     * class is called. In this case we will stop
+     * the media player and then release it.
      */
     @Override
     public boolean onUnbind(Intent intent) {
@@ -441,7 +448,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     public void showNotification() {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_media);
-        notificationView.setImageViewUri(R.id.ivAlbumArt, Retriever.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
+        try {
+            notificationView.setImageViewUri(R.id.ivAlbumArt, Retriever.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
+        } catch (Exception e) {
+            notificationView.setImageViewResource(R.id.ivAlbumArt, R.drawable.default_album_art);
+        }
         notificationView.setTextViewText(R.id.notify_song_name, songsList.get(position).getName());
 
         Intent intent = new Intent(this, NowPlaying.class);
@@ -452,13 +463,22 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
         mNotification = notificationBuilder
                 .setContentIntent(pendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
+                .setSmallIcon(R.drawable.ic_play_arrow_black_24dp)
                 .setOngoing(true)
                 .setWhen(System.currentTimeMillis())
                 .setContent(notificationView)
                 .setOngoing(true)
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
+
+        Intent closeMusicServiceIntent = new Intent(PlaybackService.ACTION_NEXT);
+
+        PendingIntent stopServiceIntent = PendingIntent.getActivity(this,
+                500,
+                closeMusicServiceIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationView.setOnClickPendingIntent(R.id.ivStopService, stopServiceIntent);
 
         startForeground(NOTIFICATION_ID, mNotification);
     }
