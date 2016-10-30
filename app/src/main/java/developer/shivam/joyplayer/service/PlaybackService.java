@@ -238,21 +238,23 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             if (action != null) {
                 switch (action) {
                     case ACTION_PLAY:
+                        Log.d("ACTION", "PLAY");
                         playPause();
                         break;
                     case ACTION_PAUSE:
+                        Log.d("ACTION", "PAUSE");
                         playPause();
                         break;
                     case ACTION_NEXT:
+                        Log.d("ACTION", "NEXT");
                         playNext();
                         break;
                     case ACTION_PREVIOUS:
+                        Log.d("ACTION", "PREVIOUS");
                         playPrevious();
                         break;
                     case ACTION_STOP_SERVICE:
-                        System.out.println("Called");
-                        Intent intent1 = new Intent(this, PlaybackService.class);
-                        stopService(intent1);
+                        Log.d("ACTION", "STOP");
                         break;
                 }
             }
@@ -262,7 +264,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
          * START_STICKY means that system will try to restart the service when
          *  its force-closed.
          */
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Override
@@ -461,6 +463,14 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        Intent stopServiceIntent = new Intent(ACTION_NEXT);
+        PendingIntent stopServicePendingIntent = PendingIntent.getActivity(this,
+                100,
+                stopServiceIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT);
+
+        notificationView.setOnClickPendingIntent(R.id.ivStopService, stopServicePendingIntent);
+
         mNotification = notificationBuilder
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(R.drawable.ic_play_arrow_black_24dp)
@@ -470,15 +480,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .setOngoing(true)
                 .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
-
-        Intent closeMusicServiceIntent = new Intent(PlaybackService.ACTION_NEXT);
-
-        PendingIntent stopServiceIntent = PendingIntent.getActivity(this,
-                500,
-                closeMusicServiceIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT);
-
-        notificationView.setOnClickPendingIntent(R.id.ivStopService, stopServiceIntent);
 
         startForeground(NOTIFICATION_ID, mNotification);
     }
