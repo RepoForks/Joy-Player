@@ -36,6 +36,7 @@ import developer.shivam.joyplayer.util.Global;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.PermissionManager;
 import developer.shivam.joyplayer.util.State;
+import developer.shivam.joyplayer.view.SimpleDividerItemDecoration;
 
 public class TracksFragment extends Fragment implements onPermissionListener, OnClickListener {
 
@@ -125,6 +126,7 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
     public void setUpRecyclerView(List<Songs> list) {
         LinearLayoutManager layoutManager = new LinearLayoutManager(mContext);
         rvSongsList.setLayoutManager(layoutManager);
+        rvSongsList.addItemDecoration(new SimpleDividerItemDecoration(mContext));
         if (list.size() == 0) {
             Toast.makeText(mContext, "No media files", Toast.LENGTH_SHORT).show();
         } else {
