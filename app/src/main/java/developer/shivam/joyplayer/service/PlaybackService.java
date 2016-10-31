@@ -11,8 +11,10 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -438,6 +440,12 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         serviceHandler.removeCallbacks(serviceRunnable);
 
         /**
+         * Finally we need to unregister the receiver that
+         *  listen to close the service from the notification
+         */
+        unregisterReceiver(closeServiceReceiver);
+
+        /**
          * Un-Linking the phoneStateListener that was used to pause the
          *  song when phone rings.
          */
@@ -463,10 +471,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 intent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent stopServiceIntent = new Intent(ACTION_NEXT);
-        PendingIntent stopServicePendingIntent = PendingIntent.getActivity(this,
+        registerReceiver(closeServiceReceiver, new IntentFilter("CLOSE_SERVICE_INTENT_FILTER"));
+
+        PendingIntent stopServicePendingIntent = PendingIntent.getBroadcast(mContext,
                 100,
-                stopServiceIntent,
+                new Intent("CLOSE_SERVICE_INTENT_FILTER"),
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         notificationView.setOnClickPendingIntent(R.id.ivStopService, stopServicePendingIntent);
@@ -477,10 +486,16 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .setOngoing(true)
                 .setWhen(System.currentTimeMillis())
                 .setContent(notificationView)
-                .setOngoing(true)
-                .setDefaults(Notification.FLAG_NO_CLEAR)
                 .build();
 
         startForeground(NOTIFICATION_ID, mNotification);
     }
+
+    protected BroadcastReceiver closeServiceReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            stopForeground(true);
+            stopSelf();
+        }
+    };
 }
