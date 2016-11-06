@@ -294,7 +294,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             listener.onMusicPause();
         } else if (playerState == State.PAUSE) {
             playerState = State.PLAY;
-            mPlayer.start();
+            playSong(playerState);
             listener.onMusicPlay();
         }
     }
