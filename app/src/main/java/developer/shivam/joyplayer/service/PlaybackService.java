@@ -34,6 +34,7 @@ import java.util.List;
 
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.activity.NowPlaying;
+import developer.shivam.joyplayer.listener.PlaybackListener;
 import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.State;
@@ -95,6 +96,12 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
      * and to set service running in foreground.
      */
     final int NOTIFICATION_ID = 200;
+
+    PlaybackListener listener;
+
+    public void setPlaybackListener(final PlaybackListener listener) {
+        this.listener = listener;
+    }
 
     private class ServiceRunnable implements Runnable {
 
@@ -217,6 +224,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     @Override
     public void onCompletion(MediaPlayer mp) {
         if (isRunningInBackground) {
+            listener.onCompletion();
             if (position < songsList.size() - 1) {
                 position += 1;
                 setPlayerPosition(0);
@@ -301,9 +309,11 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         if (playerState == State.PLAY) {
             playerState = State.PAUSE;
             mPlayer.pause();
+            listener.onMusicPause();
         } else if (playerState == State.PAUSE) {
             playerState = State.PLAY;
             mPlayer.start();
+            listener.onMusicPlay();
         }
     }
 

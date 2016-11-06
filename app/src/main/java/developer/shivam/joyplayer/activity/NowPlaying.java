@@ -17,6 +17,7 @@ import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -34,6 +35,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
+import developer.shivam.joyplayer.listener.PlaybackListener;
 import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.service.PlaybackService;
 import developer.shivam.joyplayer.util.Retriever;
@@ -41,48 +43,56 @@ import developer.shivam.joyplayer.util.HelperMethods;
 import developer.shivam.joyplayer.view.PlayPauseView;
 import developer.shivam.library.WaveView;
 
-public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompletionListener {
+public class NowPlaying extends AppCompatActivity implements PlaybackListener, View.OnClickListener {
 
-    @BindView(R.id.ivAlbumArt)
     CircleImageView ivAlbumArt;
 
-    @BindView(R.id.seekBar)
     SeekBar seekBar;
 
-    @BindView(R.id.btnPlayPause)
     PlayPauseView btnPlayPause;
 
-    @BindView(R.id.ivPrevious)
     ImageView btnPrevious;
-
-    @BindView(R.id.ivNext)
     ImageView btnNext;
 
-    @BindView(R.id.tvCurrentDuration)
     TextView tvCurrentDuration;
-
-    @BindView(R.id.tvTotalDuration)
     TextView tvTotalDuration;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.waveView)
-    WaveView nowPlayView;
-
-    @BindView(R.id.tvSongName)
     TextView tvSongName;
-
-    @BindView(R.id.tvSongArtist)
     TextView tvSongArtist;
 
+    Toolbar toolbar;
+
+    WaveView nowPlayView;
+
     private PlaybackService mPlaybackService;
+
     private Context mContext = NowPlaying.this;
+
     private boolean mBound = false;
+
     List<Songs> songsList = new ArrayList<>();
+
     Handler handler;
+
     boolean isPlaying = true;
+
     SeekBarRunnable seekBarRunnable;
+
+    @Override
+    public void onMusicPlay() {
+        nowPlayView.start();
+        btnPlayPause.toggle();
+    }
+
+    @Override
+    public void onMusicPause() {
+        nowPlayView.stop();
+        btnPlayPause.toggle();
+    }
+
+    @Override
+    public void onCompletion() {
+        playNextSong();
+    }
 
     public class SeekBarRunnable implements Runnable {
 
@@ -92,8 +102,8 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
             tvCurrentDuration.setText(HelperMethods.getSongDuration(mPlaybackService.getPlayerPosition()));
             handler.postDelayed(this, 100);
         }
-    }
 
+    }
     @Override
     protected void onResume() {
         super.onResume();
@@ -113,18 +123,17 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     }
 
     private ServiceConnection mConnection = new ServiceConnection() {
+
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             PlaybackService.PlayerBinder binder = (PlaybackService.PlayerBinder) iBinder;
             mBound = true;
             mPlaybackService = binder.getService();
-            updateView(mPlaybackService);
-            Log.d("NowPlaying", "Service bounded with " + songsList.size() + " songs");
+            updateView();
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.d("NowPlaying", "Service unbounded");
             mBound = false;
         }
     };
@@ -134,17 +143,34 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_playing);
 
-        ButterKnife.bind(this);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle("");
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+
+        ivAlbumArt = (CircleImageView) findViewById(R.id.ivAlbumArt);
+        seekBar = (SeekBar) findViewById(R.id.seekBar);
+
+        tvCurrentDuration = (TextView) findViewById(R.id.tvCurrentDuration);
+        tvTotalDuration = (TextView) findViewById(R.id.tvTotalDuration);
+
+        btnPrevious = (ImageView) findViewById(R.id.ivPrevious);
+        btnPrevious.setOnClickListener(this);
+        btnNext = (ImageView) findViewById(R.id.ivNext);
+        btnNext.setOnClickListener(this);
+
+        btnPlayPause = (PlayPauseView) findViewById(R.id.btnPlayPause);
+        btnPlayPause.setOnClickListener(this);
+
+        tvSongName = (TextView) findViewById(R.id.tvSongName);
+        tvSongArtist = (TextView) findViewById(R.id.tvSongArtist);
+
+        nowPlayView = (WaveView) findViewById(R.id.waveView);
     }
 
-    private void updateView(PlaybackService service) {
-        this.mPlaybackService = service;
-
+    private void updateView() {
         /**
          * If this client is connected to mPlaybackService then
          *  only perform mediaPlayer operation
@@ -152,8 +178,7 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         if (mPlaybackService != null) {
             handler.post(seekBarRunnable);
             setCurrentSong();
-            mPlaybackService.mPlayer.setOnCompletionListener(this);
-
+            mPlaybackService.setPlaybackListener(this);
             seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -220,47 +245,16 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         }
     }
 
-    HashMap<String, Palette.Swatch> processPalette(Palette p) {
-        HashMap<String, Palette.Swatch> map = new HashMap<>();
-
-        if (p.getVibrantSwatch() != null)
-            map.put("Vibrant", p.getVibrantSwatch());
-        if (p.getDarkVibrantSwatch() != null)
-            map.put("DarkVibrant", p.getDarkVibrantSwatch());
-        if (p.getLightVibrantSwatch() != null)
-            map.put("LightVibrant", p.getLightVibrantSwatch());
-
-        if (p.getMutedSwatch() != null)
-            map.put("Muted", p.getMutedSwatch());
-        if (p.getDarkMutedSwatch() != null)
-            map.put("DarkMuted", p.getDarkMutedSwatch());
-        if (p.getLightMutedSwatch() != null)
-            map.put("LightMuted", p.getLightMutedSwatch());
-
-        return map;
-    }
-
-    @OnClick(R.id.btnPlayPause)
     public void playPause() {
         isPlaying = !isPlaying;
         mPlaybackService.playPause();
-        if (isPlaying) {
-            btnPlayPause.toggle();
-            nowPlayView.start();
-
-        } else {
-            btnPlayPause.toggle();
-            nowPlayView.stop();
-        }
     }
 
-    @OnClick(R.id.ivPrevious)
     public void playPreviousSong() {
         mPlaybackService.playPrevious();
         setCurrentSong();
     }
 
-    @OnClick(R.id.ivNext)
     public void playNextSong() {
         mPlaybackService.playNext();
         setCurrentSong();
@@ -276,11 +270,6 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
     }
 
     @Override
-    public void onCompletion(MediaPlayer mp) {
-        playNextSong();
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -288,5 +277,16 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        switch (view.getId()) {
+            case R.id.ivNext : playNextSong(); break;
+            case R.id.ivPrevious : playPreviousSong(); break;
+            case R.id.btnPlayPause: playPause(); break;
+        }
+
     }
 }

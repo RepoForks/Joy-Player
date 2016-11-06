@@ -156,17 +156,17 @@ public class Retriever {
         return bitmap;
     }
 
-    public static String getFormattedString(String songName) {
+    private static String getFormattedString(String songName) {
         String name = "";
         boolean toInsert = true;
         for (int i = 0; i < songName.length(); i++) {
-            if (songName.charAt(i) == '(') {
+            if (songName.charAt(i) == '(' || songName.charAt(i) != '[') {
                 toInsert = false;
-            } else if (songName.charAt(i) == ')') {
+            } else if (songName.charAt(i) == ')' || songName.charAt(i) != ']') {
                 toInsert = true;
             }
-            if (toInsert) {
-                name += songName.charAt(i);
+            if (toInsert && songName.charAt(i) != ')' && songName.charAt(i) != ']') {
+                name += String.valueOf(songName.charAt(i));
             }
         }
         return name;
