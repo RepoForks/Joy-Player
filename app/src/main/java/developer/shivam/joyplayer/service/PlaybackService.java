@@ -7,6 +7,7 @@ package developer.shivam.joyplayer.service;
  * like Activities
  */
 
+import android.animation.ValueAnimator;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,6 +16,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.PixelFormat;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -22,16 +24,24 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.support.v7.widget.CardView;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RemoteViews;
+
+import com.bumptech.glide.Glide;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.activity.NowPlaying;
 import developer.shivam.joyplayer.listener.PlaybackListener;
@@ -98,6 +108,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     final int NOTIFICATION_ID = 200;
 
     PlaybackListener listener;
+    private CircleImageView floatingIcon;
+    private boolean isRunning = false;
 
     public void setPlaybackListener(final PlaybackListener listener) {
         this.listener = listener;
@@ -107,9 +119,9 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
         @Override
         public void run() {
-            if (System.currentTimeMillis() - timeStamp > 1000) {
+            if (System.currentTimeMillis() - timeStamp > 5000) {
                 timeStamp = System.currentTimeMillis();
-                System.out.println("I'm running");
+                //System.out.println("I'm running");
             }
             serviceHandler.post(this);
         }
@@ -167,6 +179,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         serviceRunnable = new ServiceRunnable();
         serviceHandler = new Handler();
         serviceHandler.post(serviceRunnable);
+
+        floatingIcon = new CircleImageView(mContext);
 
         /**
          * Here we will register the PHONE_STATE_LISTENER
@@ -298,6 +312,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
          *  will call the mediaPlayer.start() to start the media playing
          */
         mPlayer.prepareAsync();
+        showBubble();
         showNotification();
     }
 
@@ -451,6 +466,12 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
          */
         unregisterReceiver(closeServiceReceiver);
 
+        isRunning = false;
+
+        if (floatingIcon != null) {
+            mWindowManager.removeView(floatingIcon);
+        }
+
         /**
          * Un-Linking the phoneStateListener that was used to pause the
          *  song when phone rings.
@@ -504,4 +525,90 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             stopSelf();
         }
     };
+
+    private void showBubble() {
+        mWindowManager = (WindowManager) getSystemService(WINDOW_SERVICE);
+
+        Glide.with(mContext)
+                .load(Retriever.getAlbumArtUri(Long.parseLong(getSongsList().get(getPosition()).getAlbumId())))
+                .into(floatingIcon);
+
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
+                150,
+                150,
+                WindowManager.LayoutParams.TYPE_PHONE,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                PixelFormat.TRANSPARENT
+        );
+
+        params.gravity = Gravity.TOP | Gravity.START;
+        params.x = -20;
+        params.y = 100;
+
+        if (isRunning) {
+            Glide.with(mContext)
+                    .load(Retriever.getAlbumArtUri(Long.parseLong(getSongsList().get(getPosition()).getAlbumId())))
+                    .into(floatingIcon);
+        } else {
+            mWindowManager.addView(floatingIcon, params);
+            isRunning = true;
+        }
+
+        try {
+            floatingIcon.setOnTouchListener(new View.OnTouchListener() {
+                private WindowManager.LayoutParams mParams = params;
+                private int initialX;
+                private int initialY;
+                private float initialTouchX;
+                private float initialTouchY;
+
+                @Override public boolean onTouch(View v, MotionEvent event) {
+                    switch (event.getAction()) {
+
+                        case MotionEvent.ACTION_DOWN:
+                            initialX = mParams.x;
+                            initialY = mParams.y;
+                            initialTouchX = event.getRawX();
+                            initialTouchY = event.getRawY();
+                            break;
+
+                        case MotionEvent.ACTION_UP:
+                            if (event.getRawX() < (mWindowManager.getDefaultDisplay().getWidth()/2)) {
+                                moveToBoundary(mWindowManager, mParams, -20);
+                            } else {
+                                moveToBoundary(mWindowManager, mParams, mWindowManager.getDefaultDisplay().getWidth() + 20);
+                            }
+                            break;
+
+                        case MotionEvent.ACTION_MOVE:
+                            mParams.x = (int) (event.getRawX() - initialTouchX) + initialX;
+                            mParams.y = (int) (event.getRawY() - initialTouchY) + initialY;
+                            mWindowManager.updateViewLayout(floatingIcon, mParams);
+                            break;
+                    }
+                    return false;
+                }
+
+            });
+        } catch (Exception e) {
+            //Handle exception here
+        }
+
+    }
+
+    public void moveToBoundary(final WindowManager manager, WindowManager.LayoutParams params, int finalPosition) {
+        final WindowManager.LayoutParams mParams = params;
+        int startPosition = params.x;
+        ValueAnimator animator = ValueAnimator.ofInt(startPosition, finalPosition);
+        animator.setDuration(100);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                mParams.x = (int) valueAnimator.getAnimatedValue();;
+                manager.updateViewLayout(floatingIcon, mParams);
+            }
+        });
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.start();
+    }
 }
