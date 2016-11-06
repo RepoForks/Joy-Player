@@ -301,11 +301,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         if (playerState == State.PLAY) {
             playerState = State.PAUSE;
             mPlayer.pause();
-            stopForeground(true);
-            mNotification = notificationBuilder.setAutoCancel(true).setOngoing(false).build();
-            notificationManager.notify(NOTIFICATION_ID, mNotification);
         } else if (playerState == State.PAUSE) {
-            showNotification();
             playerState = State.PLAY;
             mPlayer.start();
         }

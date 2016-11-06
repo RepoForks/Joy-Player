@@ -89,7 +89,7 @@ public class Retriever {
                 if (externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)) == null) {
                     songs.setName("unknown");
                 } else {
-                    songs.setName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
+                    songs.setName(getFormattedString(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE))));
                 }
                 songs.setName(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)));
                 songs.setAlbumId(externalContentCursor.getString(externalContentCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID)));
@@ -154,5 +154,21 @@ public class Retriever {
         }
 
         return bitmap;
+    }
+
+    public static String getFormattedString(String songName) {
+        String name = "";
+        boolean toInsert = true;
+        for (int i = 0; i < songName.length(); i++) {
+            if (songName.charAt(i) == '(') {
+                toInsert = false;
+            } else if (songName.charAt(i) == ')') {
+                toInsert = true;
+            }
+            if (toInsert) {
+                name += songName.charAt(i);
+            }
+        }
+        return name;
     }
 }

@@ -63,18 +63,24 @@ public class SongsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             ViewHolder songHolder = (ViewHolder) holder;
             songHolder.tvSongName.setText(mSongsList.get(position).getName());
             songHolder.tvSingerName.setText(mSongsList.get(position).getSingerName() + " · " + HelperMethods.getSongDuration(Integer.valueOf(mSongsList.get(position).getDuration())));
-            Glide.with(mContext).load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId()))).placeholder(R.drawable.default_album_art).into(songHolder.ivAlbumArt);
+            Glide.with(mContext)
+                    .load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(position).getAlbumId())))
+                    .placeholder(R.drawable.default_album_art)
+                    .into(songHolder.ivAlbumArt);
         } else if (holder instanceof AdHolder) {
             AdHolder adHolder = (AdHolder) holder;
-            //adHolder.adView.loadAd(new AdRequest.Builder().build());
-            adHolder.adView.loadAd(new AdRequest.Builder().addTestDevice("C506057DBAF31FD9D2D08AE17D432321").build());
+            adHolder.adView.loadAd(new AdRequest.Builder().build());
         }
     }
 
     @Override
     public int getItemViewType(int position) {
         if (ConnectionDetector.hasNetworkConnection(mContext)) {
-            return position % AD_AFTER_ITEMS == 0 ? TYPE_AD_ITEM : TYPE_SONG_ITEM;
+            if (position == 0) {
+                return TYPE_SONG_ITEM;
+            } else {
+                return position % AD_AFTER_ITEMS == 0 ? TYPE_AD_ITEM : TYPE_SONG_ITEM;
+            }
         } else {
             return TYPE_SONG_ITEM;
         }

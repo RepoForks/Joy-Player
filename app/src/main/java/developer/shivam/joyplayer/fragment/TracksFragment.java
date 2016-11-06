@@ -144,7 +144,9 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             spacing.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.horizontal_card_margin), LinearLayout.LayoutParams.MATCH_PARENT));
 
             ((TextView) view.findViewById(R.id.tvSongName)).setText(mSongsList.get(i).getName());
-            Glide.with(mContext).load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(i).getAlbumId()))).placeholder(R.drawable.default_album_art).into((ImageView) view.findViewById(R.id.ivAlbumArt));
+            Glide.with(mContext)
+                    .load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(i).getAlbumId())))
+                    .into((ImageView) view.findViewById(R.id.ivAlbumArt));
 
             linearLayoutRecentlyAddedItem.addView(spacing);
             linearLayoutRecentlyAddedItem.addView(view);

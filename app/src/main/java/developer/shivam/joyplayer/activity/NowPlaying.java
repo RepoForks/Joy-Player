@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -179,7 +180,10 @@ public class NowPlaying extends AppCompatActivity implements MediaPlayer.OnCompl
         Songs track = mPlaybackService.getSongsList().get(mPlaybackService.getPosition());
         tvTotalDuration.setText(HelperMethods.getSongDuration(Integer.parseInt(track.getDuration())));
         Uri albumArtUri = Retriever.getAlbumArtUri(Long.parseLong(track.getAlbumId()));
-        Glide.with(mContext).load(albumArtUri).placeholder(R.drawable.default_album_art).error(R.drawable.default_album_art).into(ivAlbumArt);
+        Glide.with(mContext)
+                .load(albumArtUri)
+                .placeholder(R.drawable.default_album_art)
+                .into(ivAlbumArt);
         seekBar.setMax(Integer.parseInt(track.getDuration()));
         ivAlbumArt.setAlpha(0.9f);
         tvSongName.setText(track.getName());

@@ -40,7 +40,7 @@
             android:layout_marginStart="5dp"
             android:textStyle="italic"
             android:textSize="14sp"
-            android:textColor="#ffffff"
+            android:textColor="#aaffffff"
             android:maxLines="1"
             android:layout_marginLeft="5dp" />
     </LinearLayout>
