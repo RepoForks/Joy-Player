@@ -328,7 +328,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
              *  then the current playing song will restart else the
              *  previous song in the list will play
              */
-            if (getPlayerPosition() < 1000) {
+            if (getPlayerPosition() > 1500) {
                 mPlayer.pause();
                 setPlayerPosition(0);
                 mPlayer.start();
