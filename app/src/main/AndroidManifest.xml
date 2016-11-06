@@ -34,8 +34,6 @@
                 <action android:name="developer.shivam.joyplayer.action.PAUSE" />
                 <action android:name="developer.shivam.joyplayer.action.NEXT" />
                 <action android:name="developer.shivam.joyplayer.action.PREVIOUS" />
-                <action android:name="developer.shivam.joyplayer.action.STOP_SERVICE" />
-                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </service>
 

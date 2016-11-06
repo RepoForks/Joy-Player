@@ -104,13 +104,16 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             PermissionManager.with(getActivity())
                     .setPermissionListener(this)
                     .getPermission(Manifest.permission.READ_EXTERNAL_STORAGE);
-
         } else {
-            mSongsList = Retriever.getSongs(mContext);
-            globalVariable.setSongsList(mSongsList);
-            setUpRecyclerView(mSongsList);
+            if (globalVariable.getSongsList().size() != 0) {
+                mSongsList = Retriever.getSongs(mContext);
+                globalVariable.setSongsList(mSongsList);
+                setUpRecyclerView(mSongsList);
+            } else {
+                mSongsList = globalVariable.getSongsList();
+                setUpRecyclerView(mSongsList);
+            }
         }
-
     }
 
     @Override
@@ -134,27 +137,6 @@ public class TracksFragment extends Fragment implements onPermissionListener, On
             adapter.setOnClickListener(this);
             rvSongsList.setAdapter(adapter);
         }
-    }
-
-    public void loadHorizontalRecentlyAddedItems(LinearLayout linearLayoutRecentlyAddedItem) {
-        for (int i = 0; i < 5; i++) {
-            View view = LayoutInflater.from(mContext).inflate(R.layout.view_recently_song_card, null);
-
-            View spacing = new View(mContext);
-            spacing.setLayoutParams(new LinearLayout.LayoutParams((int) getResources().getDimension(R.dimen.horizontal_card_margin), LinearLayout.LayoutParams.MATCH_PARENT));
-
-            ((TextView) view.findViewById(R.id.tvSongName)).setText(mSongsList.get(i).getName());
-            Glide.with(mContext)
-                    .load(Retriever.getAlbumArtUri(Long.parseLong(mSongsList.get(i).getAlbumId())))
-                    .into((ImageView) view.findViewById(R.id.ivAlbumArt));
-
-            linearLayoutRecentlyAddedItem.addView(spacing);
-            linearLayoutRecentlyAddedItem.addView(view);
-        }
-
-        View spacing = new View(mContext);
-        spacing.setLayoutParams(new LinearLayout.LayoutParams(32, LinearLayout.LayoutParams.MATCH_PARENT));
-        linearLayoutRecentlyAddedItem.addView(spacing);
     }
 
     @Override

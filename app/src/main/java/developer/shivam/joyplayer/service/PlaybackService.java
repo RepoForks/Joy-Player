@@ -70,11 +70,9 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     private Uri songUri;
 
-    private int playerState = 0;
+    private int playerState = State.IDLE;
 
     private List<Songs> songsList = new ArrayList<>();
-
-    public boolean isRunningInBackground = false;
 
     /**
      * Play, pause, next and previous song.
@@ -85,20 +83,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     public static final String ACTION_PAUSE = "developer.shivam.joyplayer.action.PAUSE";
     public static final String ACTION_NEXT = "developer.shivam.joyplayer.action.NEXT";
     public static final String ACTION_PREVIOUS = "developer.shivam.joyplayer.action.PREVIOUS";
-    public static final String ACTION_STOP_SERVICE = "developer.shivam.joyplayer.action.STOP_SERVICE";
-
-    /**
-     * serviceHandler is used to print log in logcat after
-     * every second to say - I'm running on the service behalf
-     */
-    Handler serviceHandler;
-
-    /**
-     * timeStamp used to record the current time in millis
-     */
-    long timeStamp = 0;
-
-    private ServiceRunnable serviceRunnable;
 
     /**
      * NOTIFICATION_ID is the common notification id
@@ -113,18 +97,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     public void setPlaybackListener(final PlaybackListener listener) {
         this.listener = listener;
-    }
-
-    private class ServiceRunnable implements Runnable {
-
-        @Override
-        public void run() {
-            if (System.currentTimeMillis() - timeStamp > 5000) {
-                timeStamp = System.currentTimeMillis();
-                //System.out.println("I'm running");
-            }
-            serviceHandler.post(this);
-        }
     }
 
     /**
@@ -148,9 +120,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
      */
     private WindowManager mWindowManager;
 
-    /**
-     * bubbleImageView is the view which will be added to the view
-     */
     private Notification mNotification;
     private Notification.Builder notificationBuilder;
     private NotificationManager notificationManager;
@@ -176,12 +145,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         mPlayer.setOnErrorListener(this);
         mPlayer.setOnCompletionListener(this);
 
-        serviceRunnable = new ServiceRunnable();
-        serviceHandler = new Handler();
-        serviceHandler.post(serviceRunnable);
-
-        floatingIcon = new CircleImageView(mContext);
-
         /**
          * Here we will register the PHONE_STATE_LISTENER
          *  to pause/play songs according to the phone state
@@ -205,6 +168,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             mTelephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
 
+        floatingIcon = new CircleImageView(mContext);
         notificationBuilder = new Notification.Builder(getApplicationContext());
     }
 
@@ -229,29 +193,26 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
          * When media player is prepared asynchronously
          *  mediaPlayer.start is called to start song.
          */
-        if (playerState == State.PAUSE)
-            mp.pause();
-        else
-            mp.start();
+        mp.start();
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if (isRunningInBackground) {
+        if (listener != null) {
             listener.onCompletion();
-            if (position < songsList.size() - 1) {
-                position += 1;
-                setPlayerPosition(0);
-                setSongUri(songsList.get(position).getSongUri());
-                playSong(State.PLAY);
-            } else {
-                position = 0;
-                setPlayerPosition(0);
-                setSongUri(songsList.get(position).getSongUri());
-                playSong(State.PLAY);
-            }
-
         }
+        if (position < songsList.size() - 1) {
+            position += 1;
+            setPlayerPosition(0);
+            setSongUri(songsList.get(position).getSongUri());
+            playSong(playerState);
+        } else {
+            position = 0;
+            setPlayerPosition(0);
+            setSongUri(songsList.get(position).getSongUri());
+            playSong(playerState);
+        }
+
     }
 
     @Override
@@ -277,9 +238,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                         Log.d("ACTION", "PREVIOUS");
                         playPrevious();
                         break;
-                    case ACTION_STOP_SERVICE:
-                        Log.d("ACTION", "STOP");
-                        break;
                 }
             }
         }
@@ -298,20 +256,29 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     }
 
     public void playSong(int state) {
-        mPlayer.reset();
-        playerState = state;
-        try {
-            mPlayer.setDataSource(mContext, getSongUri());
-        } catch (IOException e) {
-            Log.d(TAG, "Error playing in media content");
-            e.printStackTrace();
+        if (state == State.PLAY) {
+            mPlayer.reset();
+            try {
+                mPlayer.setDataSource(mContext, getSongUri());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            /**
+             * prepareAsync() will asynchronously prepare the media player
+             *  and when its prepared it will call the onPrepared method in which we
+             *  will call the mediaPlayer.start() to start the media playing
+             */
+            mPlayer.prepareAsync();
+            playerState = state;
+        } else if (state == State.PAUSE) {
+            mPlayer.reset();
+            playerState = state;
+            try {
+                mPlayer.setDataSource(mContext, getSongUri());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        /**
-         * prepareAsync() will asynchronously prepare the media player
-         *  and when its prepared it will call the onPrepared method in which we
-         *  will call the mediaPlayer.start() to start the media playing
-         */
-        mPlayer.prepareAsync();
         showBubble();
         showNotification();
     }
@@ -392,7 +359,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 playSong(State.PLAY);
             }
         } else if (playerState == State.PAUSE) {
-            setPlayerPosition(0);
             if (getPosition() != (songsList.size() - 1)) {
                 setPosition(getPosition() + 1);
                 setSongUri(songsList.get(position).getSongUri());
@@ -434,6 +400,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
     public void setPosition(int position) {
         this.position = position;
+        Log.d(TAG, "Position : " + position);
         setSongUri(songsList.get(position).getSongUri());
     }
 
@@ -457,8 +424,6 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
         mPlayer.stop();
         mPlayer.release();
-
-        serviceHandler.removeCallbacks(serviceRunnable);
 
         /**
          * Finally we need to unregister the receiver that
@@ -562,7 +527,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 private float initialTouchX;
                 private float initialTouchY;
 
-                @Override public boolean onTouch(View v, MotionEvent event) {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
                     switch (event.getAction()) {
 
                         case MotionEvent.ACTION_DOWN:
@@ -573,7 +539,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                             break;
 
                         case MotionEvent.ACTION_UP:
-                            if (event.getRawX() < (mWindowManager.getDefaultDisplay().getWidth()/2)) {
+                            if (event.getRawX() < (mWindowManager.getDefaultDisplay().getWidth() / 2)) {
                                 moveToBoundary(mWindowManager, mParams, -20);
                             } else {
                                 moveToBoundary(mWindowManager, mParams, mWindowManager.getDefaultDisplay().getWidth() + 20);
@@ -604,7 +570,8 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                mParams.x = (int) valueAnimator.getAnimatedValue();;
+                mParams.x = (int) valueAnimator.getAnimatedValue();
+                ;
                 manager.updateViewLayout(floatingIcon, mParams);
             }
         });
