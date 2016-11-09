@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +13,6 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -26,24 +23,19 @@ import com.bumptech.glide.Glide;
 
 import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.listener.PlaybackListener;
 import developer.shivam.joyplayer.pojo.Songs;
 import developer.shivam.joyplayer.service.PlaybackService;
-import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.HelperMethods;
+import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.view.PlayPauseView;
-import developer.shivam.library.WaveView;
 
 public class NowPlaying extends AppCompatActivity implements PlaybackListener, View.OnClickListener {
+
+    Context mContext = NowPlaying.this;
 
     CircleImageView ivAlbumArt;
 
@@ -61,31 +53,21 @@ public class NowPlaying extends AppCompatActivity implements PlaybackListener, V
 
     Toolbar toolbar;
 
-    WaveView nowPlayView;
-
     private PlaybackService mPlaybackService;
 
-    private Context mContext = NowPlaying.this;
-
-    private boolean mBound = false;
-
-    List<Songs> songsList = new ArrayList<>();
-
-    Handler handler;
-
+    boolean mBound = false;
     boolean isPlaying = true;
 
+    Handler handler;
     SeekBarRunnable seekBarRunnable;
 
     @Override
     public void onMusicPlay() {
-        nowPlayView.start();
         btnPlayPause.toggle();
     }
 
     @Override
     public void onMusicPause() {
-        nowPlayView.stop();
         btnPlayPause.toggle();
     }
 
@@ -110,13 +92,6 @@ public class NowPlaying extends AppCompatActivity implements PlaybackListener, V
 
         Intent playServiceIntent = new Intent(mContext, PlaybackService.class);
         bindService(playServiceIntent, mConnection, Context.BIND_AUTO_CREATE);
-
-        nowPlayView.setAmplitude(1);
-        if (isPlaying) {
-            nowPlayView.start();
-        } else {
-            nowPlayView.stop();
-        }
 
         handler = new Handler();
         seekBarRunnable = new SeekBarRunnable();
@@ -167,7 +142,6 @@ public class NowPlaying extends AppCompatActivity implements PlaybackListener, V
         tvSongName = (TextView) findViewById(R.id.tvSongName);
         tvSongArtist = (TextView) findViewById(R.id.tvSongArtist);
 
-        nowPlayView = (WaveView) findViewById(R.id.waveView);
     }
 
     private void updateView() {
@@ -227,15 +201,9 @@ public class NowPlaying extends AppCompatActivity implements PlaybackListener, V
                     if (palette.getVibrantSwatch() != null) {
                         int value = 0x000000;
                         String color = "#" + String.valueOf(Integer.toHexString(palette.getVibrantColor(value)));
-                        Log.d("Vibrant", color);
-                        nowPlayView.setColor(color);
-                    }
-
-                    if (palette.getDarkVibrantSwatch() != null) {
+                    } else if (palette.getDarkVibrantSwatch() != null) {
                         int value = 0x000000;
                         String color = "#" + String.valueOf(Integer.toHexString(palette.getDarkVibrantColor(value)));
-                        Log.d("Vibrant", color);
-                        nowPlayView.setColorOne(color);
                     }
                 }
             });
@@ -287,6 +255,5 @@ public class NowPlaying extends AppCompatActivity implements PlaybackListener, V
             case R.id.ivPrevious : playPreviousSong(); break;
             case R.id.btnPlayPause: playPause(); break;
         }
-
     }
 }

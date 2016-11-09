@@ -21,10 +21,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.support.v7.widget.CardView;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -32,10 +30,11 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.RemoteViews;
 
 import com.bumptech.glide.Glide;
+import com.daasuu.ei.Ease;
+import com.daasuu.ei.EasingInterpolator;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -46,6 +45,7 @@ import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.activity.NowPlaying;
 import developer.shivam.joyplayer.listener.PlaybackListener;
 import developer.shivam.joyplayer.pojo.Songs;
+import developer.shivam.joyplayer.util.HelperMethods;
 import developer.shivam.joyplayer.util.Retriever;
 import developer.shivam.joyplayer.util.State;
 
@@ -200,19 +200,19 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     public void onCompletion(MediaPlayer mp) {
         if (listener != null) {
             listener.onCompletion();
-        }
-        if (position < songsList.size() - 1) {
-            position += 1;
-            setPlayerPosition(0);
-            setSongUri(songsList.get(position).getSongUri());
-            playSong(playerState);
         } else {
-            position = 0;
-            setPlayerPosition(0);
-            setSongUri(songsList.get(position).getSongUri());
-            playSong(playerState);
+            if (position < songsList.size() - 1) {
+                position += 1;
+                setPlayerPosition(0);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong(playerState);
+            } else {
+                position = 0;
+                setPlayerPosition(0);
+                setSongUri(songsList.get(position).getSongUri());
+                playSong(playerState);
+            }
         }
-
     }
 
     @Override
@@ -279,7 +279,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 e.printStackTrace();
             }
         }
-        showBubble();
+
         showNotification();
     }
 
@@ -294,7 +294,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
             listener.onMusicPause();
         } else if (playerState == State.PAUSE) {
             playerState = State.PLAY;
-            playSong(playerState);
+            mPlayer.start();
             listener.onMusicPlay();
         }
     }
@@ -447,9 +447,15 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
         }
     }
 
+    /**
+     * Below is the code for showing the notification in
+     * the notification bar which shows name of the current playing
+     * media file and on tapping that notification an intent will be
+     * fired to the NowPlaying activity
+     */
     public void showNotification() {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.notification_media);
+        RemoteViews notificationView = new RemoteViews(getPackageName(), R.layout.layout_notification);
         try {
             notificationView.setImageViewUri(R.id.ivAlbumArt, Retriever.getAlbumArtUri(Long.parseLong(songsList.get(position).getAlbumId())));
         } catch (Exception e) {
@@ -486,6 +492,10 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
     protected BroadcastReceiver closeServiceReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            if (playerState == State.PLAY) {
+                mPlayer.pause();
+                playerState = State.PAUSE;
+            }
             stopForeground(true);
             stopSelf();
         }
@@ -498,21 +508,23 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 .load(Retriever.getAlbumArtUri(Long.parseLong(getSongsList().get(getPosition()).getAlbumId())))
                 .into(floatingIcon);
 
+        int floatingIconDimension = HelperMethods.getDpFromPixel(mContext, 60);
         final WindowManager.LayoutParams params = new WindowManager.LayoutParams(
-                150,
-                150,
+                floatingIconDimension,
+                floatingIconDimension,
                 WindowManager.LayoutParams.TYPE_PHONE,
                 WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                 PixelFormat.TRANSPARENT
         );
 
         params.gravity = Gravity.TOP | Gravity.START;
-        params.x = -20;
-        params.y = 100;
+        params.x = 0;
+        params.y = 0;
 
         if (isRunning) {
             Glide.with(mContext)
                     .load(Retriever.getAlbumArtUri(Long.parseLong(getSongsList().get(getPosition()).getAlbumId())))
+                    .placeholder(R.drawable.default_album_art)
                     .into(floatingIcon);
         } else {
             mWindowManager.addView(floatingIcon, params);
@@ -521,11 +533,17 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
 
         try {
             floatingIcon.setOnTouchListener(new View.OnTouchListener() {
+
                 private WindowManager.LayoutParams mParams = params;
+
                 private int initialX;
                 private int initialY;
                 private float initialTouchX;
                 private float initialTouchY;
+
+                int TOUCH_DELAY = 300;
+
+                long tapMilliSeconds = 0;
 
                 @Override
                 public boolean onTouch(View v, MotionEvent event) {
@@ -536,13 +554,16 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                             initialY = mParams.y;
                             initialTouchX = event.getRawX();
                             initialTouchY = event.getRawY();
+
+                            tapMilliSeconds = System.currentTimeMillis();
+
                             break;
 
                         case MotionEvent.ACTION_UP:
                             if (event.getRawX() < (mWindowManager.getDefaultDisplay().getWidth() / 2)) {
-                                moveToBoundary(mWindowManager, mParams, -20);
+                                moveToBoundary(mWindowManager, mParams, 10);
                             } else {
-                                moveToBoundary(mWindowManager, mParams, mWindowManager.getDefaultDisplay().getWidth() + 20);
+                                moveToBoundary(mWindowManager, mParams, mWindowManager.getDefaultDisplay().getWidth() - 10);
                             }
                             break;
 
@@ -575,7 +596,7 @@ public class PlaybackService extends Service implements MediaPlayer.OnPreparedLi
                 manager.updateViewLayout(floatingIcon, mParams);
             }
         });
-        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setInterpolator(new EasingInterpolator(Ease.BACK_OUT));
         animator.start();
     }
 }

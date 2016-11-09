@@ -19,9 +19,6 @@ import android.view.View;
 import java.util.List;
 import java.util.Vector;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import developer.shivam.joyplayer.R;
 import developer.shivam.joyplayer.adapter.ViewPagerAdapter;
 import developer.shivam.joyplayer.fragment.TracksFragment;
